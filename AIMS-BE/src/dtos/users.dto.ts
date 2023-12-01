@@ -1,3 +1,3 @@
 import { UserModelDto } from './models/user-model.dto'
 
-export type CreateUserDto = Pick<UserModelDto, 'email' | 'role'>
+export type CreateUserDto = Pick<UserModelDto, 'email'>

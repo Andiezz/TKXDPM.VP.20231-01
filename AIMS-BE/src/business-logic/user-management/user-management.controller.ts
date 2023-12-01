@@ -6,6 +6,8 @@ import { CreateUserDto } from '../../dtos/users.dto'
 import { UsersDao, UsersMongooseDao } from '../../daos/users'
 import * as Validtors from '../../middlewares/validators.middleware'
 import { BaseResponse } from '../../common/base-response'
+import { BadRequestError } from '../../errors'
+import { hashData } from '../../utils/security'
 
 export class UserManagementController implements Controller {
     public readonly path = '/users'
@@ -25,7 +27,20 @@ export class UserManagementController implements Controller {
                     res: Response
                 ): Promise<Response | void> => {
                     const createUserDto = <CreateUserDto>req.body
-                    await this.usersDao.create(createUserDto)
+
+                    const isUserExist = await this.usersDao.isExist({
+                        email: createUserDto.email,
+                    })
+                    if (isUserExist) {
+                        throw new BadRequestError(
+                            'This email is already registered'
+                        )
+                    }
+                    const hashedPassword = hashData(
+                        process.env.DEFAULT_PASSWORD!
+                    )
+
+                    await this.usersDao.create(createUserDto, hashedPassword)
 
                     return res.json(
                         new BaseResponse().ok('Create new user account')
