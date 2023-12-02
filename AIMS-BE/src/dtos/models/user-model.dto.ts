@@ -1,5 +1,7 @@
+import { ObjectId } from "../../utils/types"
+
 export interface UserModelDto {
-    id: string
+    id: number | ObjectId
     email: string
     password: string
     role: string

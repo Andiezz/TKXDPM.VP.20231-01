@@ -1,0 +1,29 @@
+import mongoose, { Schema, model } from 'mongoose'
+import { TrackModelDto } from '../../../dtos/models/track-model.dto'
+
+const trackSchema = new Schema<TrackModelDto>({
+    artist: {
+        type: String,
+        required: true,
+    },
+    recordLabel: {
+        type: String,
+        required: true,
+    },
+    genre: {
+        type: String,
+        required: true,
+    },
+    releaseDate: {
+        type: Date,
+        required: true,
+    },
+    compactDiscId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cd',
+        required: true,
+    },
+})
+
+const Cd = model<TrackModelDto>('Track', trackSchema)
+export default Cd
