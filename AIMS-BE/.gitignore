@@ -2,3 +2,4 @@ node_modules
 *-lock.yaml
 dist
 .env
+*.lock
