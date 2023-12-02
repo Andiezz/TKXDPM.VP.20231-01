@@ -13,7 +13,7 @@ export class UsersMongooseDao implements UsersDao {
             password: hashedPassword,
         })
         const { _id, ...result } = userDoc.toObject()
-        result.id = _id.toString()
+        result.id = _id
         return result
     }
 
@@ -24,7 +24,7 @@ export class UsersMongooseDao implements UsersDao {
         }
 
         const { _id, ...result } = userDoc.toObject()
-        result.id = _id.toString()
+        result.id = _id
         return result
     }
 
