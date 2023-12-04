@@ -25,5 +25,5 @@ const trackSchema = new Schema<TrackModelDto>({
     },
 })
 
-const Cd = model<TrackModelDto>('Track', trackSchema)
-export default Cd
+const Track = model<TrackModelDto>('Track', trackSchema)
+export default Track

@@ -32,7 +32,20 @@
     -   Pull Request(s): [Attach links to your pull requests here. You can attach multiple pull requests]()
     -   Specific implementation details:
         -   Build models for all entities
+</details>
+<details>
+<summary>Nguyễn Ngọc Ánh </summary>
+<br>
 
+-   Assigned tasks:
+
+    -  Add DAOS schemas 
+
+-   Implementation details:
+    -   Pull Request(s): https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/4
+    -   Specific implementation details:
+        -  Add DAOS schemas 
+</details>
 </details>
 
 ---
