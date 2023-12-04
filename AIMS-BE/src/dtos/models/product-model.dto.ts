@@ -1,8 +1,8 @@
-import { ProductDimension } from '../../configs/interfaces'
+import { ProductDimension } from '../../daos/products/interfaces/products.interfaces'
 import { ObjectId } from '../../utils/types'
 
 export interface ProductModelDto {
-    id: number | ObjectId
+    id: number | ObjectId | string
     title: string
     category: string
     price: number
