@@ -58,11 +58,13 @@
 -   Assigned tasks:
 
     -  Build code base
-    -  Refactor project structure 
+    -  Refactor project structure
+    -  Authentication & Authorization
 
 -   Implementation details:
     -   Pull Request(s):
           - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/6]()
+          - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/8]()
     -   Specific implementation details:
 </details>
 </details>
