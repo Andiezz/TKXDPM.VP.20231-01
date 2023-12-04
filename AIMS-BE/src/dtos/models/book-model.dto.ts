@@ -3,7 +3,7 @@ import { ObjectId } from '../../utils/types'
 import { ProductModelDto } from './product-model.dto'
 
 export interface BookModelDto extends ProductModelDto {
-    id: number | ObjectId
+    id: number | ObjectId | string
     author: string
     coverType: COVER_TYPE
     publisher: string

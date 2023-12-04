@@ -1,7 +1,7 @@
 import { ObjectId } from "../../utils/types";
 
 export interface Invoice {
-    id: number | ObjectId
+    id:number | ObjectId | string
     totalAmount: number
-    orderId: number | ObjectId
+    orderId: number | ObjectId | string
 }

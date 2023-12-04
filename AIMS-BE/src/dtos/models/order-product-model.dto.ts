@@ -1,7 +1,8 @@
 import { ObjectId } from "../../utils/types";
 
 export interface OrderProductModelDto {
-    productId: number | ObjectId
-    orderId: number | ObjectId
+    id: number | ObjectId | string
+    productId: number | ObjectId | string
+    orderId: number | ObjectId | string
     quantity: number
 }
