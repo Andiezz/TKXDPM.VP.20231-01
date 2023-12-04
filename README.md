@@ -33,6 +33,7 @@
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/1]()
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/2]()
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/5]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/7]()
     -   Specific implementation details:
         -   Build models for all entities
 </details>
