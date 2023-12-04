@@ -29,7 +29,10 @@
     -   Build models
 
 -   Implementation details:
-    -   Pull Request(s): [Attach links to your pull requests here. You can attach multiple pull requests]()
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/1]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/2]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/5]()
     -   Specific implementation details:
         -   Build models for all entities
 </details>
