@@ -8,4 +8,5 @@ export interface UsersDao {
     ): Promise<UserModelDto>
     findById(id: string): Promise<UserModelDto | null>
     isExist(filter: Object): Promise<string | null>
+    findOne(filter: Object): Promise<UserModelDto | null>
 }
