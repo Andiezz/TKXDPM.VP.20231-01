@@ -1,6 +1,6 @@
-import { ObjectId } from "../../utils/types"
+import { ObjectId } from '../../../../utils/types'
 
-export interface UserModelDto {
+export interface IUser {
     id: number | ObjectId | string
     email: string
     password: string
@@ -8,5 +8,4 @@ export interface UserModelDto {
     status: number
     name: string
     phone: string
-    refreshToken: string
 }
