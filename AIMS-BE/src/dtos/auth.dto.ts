@@ -1,3 +1,3 @@
-import { UserModelDto } from './models/user-model.dto'
+import { IUser } from '../data-access-layer/daos/users/interfaces/user.interface'
 
-export type LoginDto = Pick<UserModelDto, 'email' | 'password'>
+export type LoginDto = Pick<IUser, 'email' | 'password'>

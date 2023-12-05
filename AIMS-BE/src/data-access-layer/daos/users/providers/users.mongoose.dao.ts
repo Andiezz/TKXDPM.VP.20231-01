@@ -1,33 +1,17 @@
-import { UserModelDto } from '../../../../dtos/models/user-model.dto'
-import { UsersDao } from '../users.dao'
-import UserModel from '../schemas/user.mongoose.schema'
+import { Document } from 'mongodb'
 import { CreateUserDto } from '../../../../dtos/users.dto'
-import { USER_ROLE } from '../../../../configs/enums'
-import { hashData } from '../../../../utils/security'
+import { IUser } from '../interfaces/user.interface'
+import { UsersDao } from '../interfaces/users.dao'
+import { UserModel } from '../schemas/user.model'
 
 export class UsersMongooseDao implements UsersDao {
-    constructor() {
-        const hash = hashData(process.env.DEFAULT_PASSWORD!)
-
-        UserModel.exists({ role: USER_ROLE.GOD }).then((userDoc) => {
-            if (userDoc) {
-                return
-            }
-            UserModel.create({
-                role: USER_ROLE.GOD,
-                email: 'god@gmail.com',
-                phone: '0912345678',
-                password: hash,
-                name: 'Jesus',
-            }).then(() => console.log('[INFO] Init admin successfully'))
-        })
-    }
+    constructor(private userModel: Document = UserModel.getInstance()) {}
 
     public async create(
         createUserDto: CreateUserDto,
         hashedPassword: string
-    ): Promise<UserModelDto> {
-        const userDoc = await UserModel.create({
+    ): Promise<IUser> {
+        const userDoc = await this.userModel.create({
             ...createUserDto,
             password: hashedPassword,
         })
@@ -36,8 +20,8 @@ export class UsersMongooseDao implements UsersDao {
         return result
     }
 
-    public async findById(id: string): Promise<UserModelDto | null> {
-        const userDoc = await UserModel.findById(id)
+    public async findById(id: string): Promise<IUser | null> {
+        const userDoc = await this.userModel.findById(id)
         if (!userDoc) {
             return null
         }
@@ -48,12 +32,12 @@ export class UsersMongooseDao implements UsersDao {
     }
 
     public async isExist(filter: Object): Promise<string | null> {
-        const result = await UserModel.exists(filter)
+        const result = await this.userModel.exists(filter)
         return result ? result.toString() : null
     }
 
-    public async findOne(filter: Object): Promise<UserModelDto | null> {
-        const userDoc = await UserModel.findOne(filter)
+    public async findOne(filter: Object): Promise<IUser | null> {
+        const userDoc = await this.userModel.findOne(filter)
         if (!userDoc) {
             return null
         }
