@@ -1,43 +1,11 @@
+import { Document } from 'mongodb'
+import { CreateUserDto } from '../../../../dtos/users.dto'
 import { IUser } from '../interfaces/user.interface'
 import { UsersDao } from '../interfaces/users.dao'
-import { CreateUserDto } from '../../../../dtos/users.dto'
-import { USER_ROLE } from '../../../../configs/enums'
-import { Schema, model } from 'mongoose'
-import { USER_STATUS } from '../../../../configs/constants'
-import { Document } from 'mongodb'
+import { UserModel } from '../schemas/user.model'
 
 export class UsersMongooseDao implements UsersDao {
-    public readonly userModel: Document
-
-    constructor() {
-        const userSchema = new Schema<IUser>(
-            {
-                email: {
-                    type: String,
-                    required: true,
-                },
-                password: {
-                    type: String,
-                    required: true,
-                    min: 3,
-                },
-                status: {
-                    type: Number,
-                    default: USER_STATUS.ACTIVE,
-                },
-                role: {
-                    type: String,
-                    default: USER_ROLE.ADMIN,
-                    enum: USER_ROLE,
-                },
-                name: String,
-                phone: String,
-            },
-            { timestamps: true }
-        )
-
-        this.userModel = model('User', userSchema)
-    }
+    constructor(private userModel: Document = UserModel.getInstance()) {}
 
     public async create(
         createUserDto: CreateUserDto,

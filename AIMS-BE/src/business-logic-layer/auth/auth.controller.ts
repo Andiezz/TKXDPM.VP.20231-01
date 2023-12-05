@@ -21,52 +21,42 @@ export class AuthController implements Controller {
         this.router.post(
             `${this.path}/login`,
             Validators.login,
-            tryCatch(
-                async (
-                    req: Request,
-                    res: Response
-                ): Promise<Response | void> => {
-                    const loginDto = <LoginDto>req.body
+            tryCatch(this.login)
+        )
+    }
 
-                    const userDoc = await this.usersDao.findOne({
-                        email: loginDto.email,
-                    })
+    private login = async (
+        req: Request,
+        res: Response
+    ): Promise<Response | void> => {
+        const loginDto = <LoginDto>req.body
 
-                    if (!userDoc) {
-                        throw new NotAuthenticatedError(
-                            'Invalid email or password'
-                        )
-                    }
+        const userDoc = await this.usersDao.findOne({
+            email: loginDto.email,
+        })
 
-                    const isValidPassword = compareHash(
-                        loginDto.password,
-                        userDoc.password
-                    )
-                    if (!isValidPassword) {
-                        throw new NotAuthenticatedError(
-                            'Invalid email or password'
-                        )
-                    }
+        if (!userDoc) {
+            throw new NotAuthenticatedError('Invalid email or password')
+        }
 
-                    const payload = {
-                        id: userDoc.id.toString(),
-                        email: userDoc.email,
-                        name: userDoc.name,
-                        role: userDoc.role,
-                        status: userDoc.status,
-                    }
-                    const accessToken = jwt.sign(
-                        payload,
-                        process.env.ACCESS_TOKEN_SECRET!
-                    )
+        const isValidPassword = compareHash(loginDto.password, userDoc.password)
+        if (!isValidPassword) {
+            throw new NotAuthenticatedError('Invalid email or password')
+        }
 
-                    return res.json(
-                        new BaseResponse().ok('Login successfully', {
-                            access_token: accessToken,
-                        })
-                    )
-                }
-            )
+        const payload = {
+            id: userDoc.id.toString(),
+            email: userDoc.email,
+            name: userDoc.name,
+            role: userDoc.role,
+            status: userDoc.status,
+        }
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!)
+
+        return res.json(
+            new BaseResponse().ok('Login successfully', {
+                access_token: accessToken,
+            })
         )
     }
 }

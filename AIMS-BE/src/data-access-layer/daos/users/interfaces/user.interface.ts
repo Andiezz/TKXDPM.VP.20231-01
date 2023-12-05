@@ -1,5 +1,3 @@
-import { ObjectId } from '../../../../utils/types'
-
 export interface IUser {
     id: number | ObjectId | string
     email: string

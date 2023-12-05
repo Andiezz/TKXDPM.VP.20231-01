@@ -1,9 +1,7 @@
-import { IUser } from './user.interface'
 import { CreateUserDto } from '../../../../dtos/users.dto'
-import { Document } from 'mongodb'
+import { IUser } from './user.interface'
 
 export interface UsersDao {
-    userModel: Document
     create(createUserDto: CreateUserDto, hashedPassword: string): Promise<IUser>
     findById(id: string): Promise<IUser | null>
     isExist(filter: Object): Promise<string | null>
