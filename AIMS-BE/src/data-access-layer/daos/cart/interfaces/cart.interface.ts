@@ -1,6 +1,4 @@
-import { ObjectId } from "../../utils/types"
-
-export interface CartModelDto {
+export interface ICart {
     id: number | ObjectId | string
     totalPrice: number
     totalPriceVat: number
