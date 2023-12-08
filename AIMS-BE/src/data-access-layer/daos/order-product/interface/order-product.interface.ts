@@ -1,6 +1,5 @@
-import { ObjectId } from "../../utils/types";
 
-export interface OrderProductModelDto {
+export interface IOrderProduct {
     id: number | ObjectId | string
     productId: number | ObjectId | string
     orderId: number | ObjectId | string

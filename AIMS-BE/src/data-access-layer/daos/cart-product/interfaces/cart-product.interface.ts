@@ -1,6 +1,5 @@
-import { ObjectId } from "../../utils/types";
 
-export interface CartProductModelDto {
+export interface ICartProduct {
     id: number | ObjectId | string
     productId: number | ObjectId | string
     cartId: number | ObjectId | string
