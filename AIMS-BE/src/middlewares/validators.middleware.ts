@@ -23,3 +23,14 @@ export const login = [
         .isLength({ min: 3 })
         .withMessage('Password must be at least 3 characters long'),
 ]
+
+export const changePassword = [
+    body('oldPassword')
+        .isLength({ min: 3 })
+        .withMessage('Password must have atleast 3 character long')
+        .trim(),
+    body('newPassword')
+        .isLength({ min: 3 })
+        .withMessage('Password must have atleast 3 character long')
+        .trim(),
+]

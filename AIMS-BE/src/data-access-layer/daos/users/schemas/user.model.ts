@@ -42,7 +42,7 @@ export class UserModel {
                     },
                     role: {
                         type: String,
-                        default: USER_ROLE.ADMIN,
+                        default: USER_ROLE.MANAGER,
                         enum: USER_ROLE,
                     },
                     name: String,

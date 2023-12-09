@@ -4,6 +4,6 @@ export enum COVER_TYPE {
 }
 
 export enum USER_ROLE {
-    GOD = 'god',
     ADMIN = 'admin',
+    MANAGER = 'manager',
 }
