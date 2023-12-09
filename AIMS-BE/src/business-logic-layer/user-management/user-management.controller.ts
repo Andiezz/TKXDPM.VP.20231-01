@@ -9,13 +9,20 @@ import { jwtAuthGuard, rolesGuard } from '../../middlewares/auth.middleware'
 import { tryCatch } from '../../middlewares/error.middleware'
 import * as validators from '../../middlewares/validators.middleware'
 import { compareHash, hashData } from '../../utils/security'
+import {
+    NotificationService,
+    RecipientDto,
+} from '../../subsystems/notification-service'
+import { MailService } from '../../subsystems/notification-service/providers/mail.service'
 
 export class UserManagementController implements Controller {
     public readonly path = '/users'
     public readonly router = Router()
     private usersDao: UsersDao
+    private notificationService: NotificationService
 
     constructor() {
+        this.notificationService = MailService.getInstance()
         this.usersDao = new UsersMongooseDao()
         this.ensureAdmin()
         this.initializeRoutes()
@@ -120,6 +127,9 @@ export class UserManagementController implements Controller {
 
         await this.usersDao.create(createUserDto, hashedPassword)
 
+        const recipient = new RecipientDto(createUserDto.email)
+        this.notificationService.pushNewUserAccount(recipient)
+
         return res.json(new BaseResponse().ok('Create new user account'))
     }
 
@@ -170,6 +180,9 @@ export class UserManagementController implements Controller {
 
         await this.usersDao.updateInfo(userId, updateUserInfoDto)
 
+        const recipient = new RecipientDto(userDoc.email)
+        this.notificationService.pushUserInfoChangesNotification(recipient)
+
         return res.json(new BaseResponse().ok('Updated user info'))
     }
 
@@ -190,6 +203,9 @@ export class UserManagementController implements Controller {
         }
 
         await this.usersDao.delete(userId)
+
+        const recipient = new RecipientDto(userDoc.email)
+        this.notificationService.pushUserInfoChangesNotification(recipient)
 
         return res.json(new BaseResponse().ok('Deleted user account'))
     }
@@ -214,6 +230,9 @@ export class UserManagementController implements Controller {
         const newHashedPassword = hashData(newPassword)
         await this.usersDao.changePassword(userId, newHashedPassword)
 
+        const recipient = new RecipientDto(userDoc.email)
+        this.notificationService.pushUserInfoChangesNotification(recipient)
+
         return res.json(new BaseResponse().ok('Changed password successfully'))
     }
 
@@ -230,6 +249,9 @@ export class UserManagementController implements Controller {
         }
 
         await this.usersDao.changeStatus(userId)
+
+        const recipient = new RecipientDto(userDoc.email)
+        this.notificationService.pushUserInfoChangesNotification(recipient)
 
         return res.json(new BaseResponse().ok('Changed status successfully'))
     }
