@@ -75,7 +75,6 @@
 <details>
 <summary>Vũ Thành An </summary>
 <br>
-
 -   Assigned tasks:
 
     -   Split app class
@@ -89,16 +88,21 @@
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
 <br>
-
 -   Assigned tasks:
 -   Implementation details:
 </details>
 <details>
 <summary>Đỗ Duy Anh </summary>
 <br>
-
 -   Assigned tasks:
+    
+    - Refactor user related components
+    - Finish user management use case'
+    
 -   Implementation details:
+    - Pull Request(s): 
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/10]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/13]()
 </details>
 </details>
 
