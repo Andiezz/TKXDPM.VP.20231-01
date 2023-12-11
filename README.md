@@ -88,8 +88,15 @@
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
 <br>
--   Assigned tasks:
+-   Assigned tasks: 
+
+        -  Replace daos according to new structure
+
 -   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/12]()
+    -   Specific implementation details:
+        -  Replace daos
 </details>
 <details>
 <summary>Đỗ Duy Anh </summary>
