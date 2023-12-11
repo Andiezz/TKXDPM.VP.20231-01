@@ -89,6 +89,7 @@
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
 <br>
+    
 -   Assigned tasks: 
 
     -  Replace daos according to new structure
@@ -102,6 +103,7 @@
 <details>
 <summary>Đỗ Duy Anh </summary>
 <br>
+    
 -   Assigned tasks:
     
     - Refactor user related components
