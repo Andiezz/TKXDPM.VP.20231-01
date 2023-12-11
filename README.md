@@ -18,7 +18,7 @@
 ## Report Content
 
 <details>
-  <summary>W1: 28/12/2023~05/12/2023 </summary>
+  <summary>W1: 28/11/2023~05/12/2023 </summary>
 <br>
 <details>
 <summary>Vũ Thành An </summary>
@@ -66,6 +66,39 @@
           - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/6]()
           - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/8]()
     -   Specific implementation details:
+</details>
+</details>
+
+<details>
+  <summary>W2: 5/12/2023~12/12/2023 </summary>
+<br>
+<details>
+<summary>Vũ Thành An </summary>
+<br>
+
+-   Assigned tasks:
+
+    -   Split app class
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/11]()
+    -   Specific implementation details:
+        -   Split app class
+</details>
+<details>
+<summary>Nguyễn Ngọc Ánh </summary>
+<br>
+
+-   Assigned tasks:
+-   Implementation details:
+</details>
+<details>
+<summary>Đỗ Duy Anh </summary>
+<br>
+
+-   Assigned tasks:
+-   Implementation details:
 </details>
 </details>
 
