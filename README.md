@@ -75,7 +75,7 @@
 <details>
 <summary>Vũ Thành An </summary>
 <br>
-    
+
 -   Assigned tasks:
 
     -   Split app class
@@ -89,7 +89,7 @@
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
 <br>
-    
+ 
 -   Assigned tasks: 
 
     -  Replace daos according to new structure
