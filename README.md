@@ -75,6 +75,7 @@
 <details>
 <summary>Vũ Thành An </summary>
 <br>
+    
 -   Assigned tasks:
 
     -   Split app class
@@ -90,7 +91,7 @@
 <br>
 -   Assigned tasks: 
 
-        -  Replace daos according to new structure
+    -  Replace daos according to new structure
 
 -   Implementation details:
     -   Pull Request(s):
