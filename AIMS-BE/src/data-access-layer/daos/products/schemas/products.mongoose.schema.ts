@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
-import { ProductModelDto } from '../../../../dtos/models/product-model.dto'
+import { IProduct } from '../interfaces/product.interface'
 
-const productSchema = new Schema<ProductModelDto>(
+const productSchema = new Schema<IProduct>(
     {
         title: {
             type: String,
@@ -43,5 +43,5 @@ const productSchema = new Schema<ProductModelDto>(
     { timestamps: true, discriminatorKey: 'kind' }
 )
 
-const Product = model<ProductModelDto>('Product', productSchema)
+const Product = model<IProduct>('Product', productSchema)
 export default Product

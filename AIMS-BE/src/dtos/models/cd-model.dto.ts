@@ -1,5 +1,5 @@
 import { ObjectId } from '../../utils/types'
-import { ProductModelDto } from './product-model.dto'
+import { ProductModelDto } from '../../data-access-layer/daos/products/interfaces/product.interface'
 
 export interface CdModelDto extends ProductModelDto {
     id: number | ObjectId | string

@@ -1,18 +1,25 @@
 import { ObjectId } from 'mongodb'
-import { ProductModelDto } from '../../../../dtos/models/product-model.dto'
+import { IProduct } from '../interfaces/product.interface'
 import { CreateProductDto } from '../../../../dtos/products.dto'
 import { BadRequestError } from '../../../../errors'
-import { ProductsDao } from '../products.dao'
-import ProductModel from '../schemas/products.mongoose.schema'
+import { ProductsDao } from '../interfaces/products.dao'
+import { ProductModel } from '../schemas/product.model'
+import { Model } from 'mongoose'
+import { IBook } from '../interfaces/book-model.dto'
+import { BookModel } from '../schemas/book.model'
 
 export class ProductsMongooseDao implements ProductsDao {
+    constructor(
+        private productModel: Model<IProduct> = ProductModel.getInstance()
+    ) {}
+
     public async create(createProductDto: CreateProductDto): Promise<boolean> {
-        await ProductModel.create(createProductDto)
+        await this.productModel.create(createProductDto)
         return true
     }
 
-    public async findById(id: string): Promise<ProductModelDto | null> {
-        const productDoc = await ProductModel.findById(id)
+    public async findById(id: string): Promise<IProduct | null> {
+        const productDoc = await this.productModel.findById(id)
         if (!productDoc) {
             return null
         }
@@ -26,24 +33,37 @@ export class ProductsMongooseDao implements ProductsDao {
         id: string,
         updateProductDto: CreateProductDto
     ): Promise<boolean> {
-        const productDoc = await ProductModel.findById(id)
+        const productDoc = await this.productModel.findById(id)
         if (!productDoc) {
             throw new BadRequestError('Product is not existed')
         }
 
-        await ProductModel.findByIdAndUpdate(new ObjectId(id), updateProductDto)
+        await this.productModel.findByIdAndUpdate(
+            new ObjectId(id),
+            updateProductDto
+        )
 
         return true
     }
 
     public async delete(id: string): Promise<boolean> {
-      const productDoc = await ProductModel.findById(id)
+        const productDoc = await this.productModel.findById(id)
         if (!productDoc) {
             throw new BadRequestError('Product is not existed')
         }
 
-      await ProductModel.findByIdAndDelete(new ObjectId(id));
+        await this.productModel.findByIdAndDelete(new ObjectId(id))
 
-      return true;
+        return true
+    }
+
+    public async isBarCodeExist(barCode: string): Promise<boolean> {
+        const isBarCodeExist = await this.productModel.findOne({
+            barcode: barCode
+        });
+        if (isBarCodeExist) {
+            return false;
+        }
+        return true;
     }
 }
