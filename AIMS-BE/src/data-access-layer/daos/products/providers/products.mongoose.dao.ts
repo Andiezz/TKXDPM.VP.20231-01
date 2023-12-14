@@ -5,13 +5,13 @@ import { BadRequestError } from '../../../../errors'
 import { ProductsDao } from '../interfaces/products.dao'
 import { ProductModel } from '../schemas/product.model'
 import { Model } from 'mongoose'
-import { IBook } from '../interfaces/book-model.dto'
+import { IBook } from '../interfaces/book.interface'
 import { BookModel } from '../schemas/book.model'
 
 export class ProductsMongooseDao implements ProductsDao {
-    constructor(
-        private productModel: Model<IProduct> = ProductModel.getInstance()
-    ) {}
+    constructor(private productModel: Model<IProduct>) {
+        this.productModel = productModel
+    }
 
     public async create(createProductDto: CreateProductDto): Promise<boolean> {
         await this.productModel.create(createProductDto)
@@ -59,11 +59,11 @@ export class ProductsMongooseDao implements ProductsDao {
 
     public async isBarCodeExist(barCode: string): Promise<boolean> {
         const isBarCodeExist = await this.productModel.findOne({
-            barcode: barCode
-        });
+            barcode: barCode,
+        })
         if (isBarCodeExist) {
-            return false;
+            return false
         }
-        return true;
+        return true
     }
 }

@@ -1,6 +1,6 @@
 import { Model, Schema, model } from 'mongoose'
 import { IProduct } from '../interfaces/product.interface'
-import { IBook } from '../interfaces/book-model.dto'
+import { IBook } from '../interfaces/book.interface'
 import { ProductModel } from './product.model'
 import { KIND } from '../../../../configs/enums'
 
