@@ -8,14 +8,14 @@ import { tryCatch } from "../../middlewares/error.middleware";
 import { CreateProductDto } from "../../dtos/products.dto";
 import { BadRequestError } from "../../errors";
 import { BaseResponse } from "../../common/base-response";
+import ProductDaoFactory from "../../data-access-layer/daos/products/product.dao.factory";
 
 export class ProductController implements Controller {
     public readonly path = '/products'
     public readonly router = Router()
-    private productsDao: ProductsDao
+    public readonly productDaoFactory = new ProductDaoFactory();
 
     constructor() {
-        this.productsDao = new ProductsMongooseDao()
         this.initializeRoutes()
     }
 
@@ -30,13 +30,15 @@ export class ProductController implements Controller {
 
     private createProduct = async (req: Request, res: Response): Promise<Response | void> => {
         const createProductDto = <CreateProductDto>req.body
+        const { kind } = req.body
+        const productDao = this.productDaoFactory.getInstance(kind);
 
-        const isProductNameExist = await this.productsDao.isBarCodeExist(createProductDto.barcode)
+        const isProductNameExist = await productDao.isBarCodeExist(createProductDto.barcode)
         if(!isProductNameExist) {
             throw new BadRequestError('Bar code has already existed')
         }
 
-        await this.productsDao.create(createProductDto)
+        await productDao.create(createProductDto)
 
         return res.json(new BaseResponse().ok('Create product successfully'))
     }
