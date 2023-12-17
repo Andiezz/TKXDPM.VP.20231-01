@@ -10,4 +10,7 @@ export enum USER_ROLE {
 
 export enum KIND {
     BOOK = 'book',
+    CD = 'cd',
+    DVD = 'dvd',
+    LONG_PLAY = 'long-play',
 }

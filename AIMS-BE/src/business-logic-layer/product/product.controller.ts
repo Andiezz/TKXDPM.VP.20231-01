@@ -9,13 +9,17 @@ import { CreateProductDto } from "../../dtos/products.dto";
 import { BadRequestError } from "../../errors";
 import { BaseResponse } from "../../common/base-response";
 import ProductDaoFactory from "../../data-access-layer/daos/products/product.dao.factory";
+import { ProductModel } from "../../data-access-layer/daos/products/schemas/product.model";
 
 export class ProductController implements Controller {
     public readonly path = '/products'
     public readonly router = Router()
-    public readonly productDaoFactory = new ProductDaoFactory();
+    public readonly productDaoFactory: ProductDaoFactory
+    public readonly productDao: ProductsDao
 
     constructor() {
+        this.productDaoFactory = new ProductDaoFactory()
+        this.productDao = new ProductsMongooseDao(ProductModel.getInstance());
         this.initializeRoutes()
     }
 

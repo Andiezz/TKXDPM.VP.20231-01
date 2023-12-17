@@ -1,7 +1,6 @@
-import { ObjectId } from '../../utils/types'
-import { ProductModelDto } from '../../data-access-layer/daos/products/interfaces/product.interface'
+import { IProduct } from './product.interface'
 
-export interface DvdModelDto extends ProductModelDto {
+export interface IDvd extends IProduct {
     id: number | ObjectId | string
     discType: string
     director: string

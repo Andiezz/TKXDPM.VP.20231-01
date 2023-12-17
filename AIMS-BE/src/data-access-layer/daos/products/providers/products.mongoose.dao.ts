@@ -3,13 +3,12 @@ import { IProduct } from '../interfaces/product.interface'
 import { CreateProductDto } from '../../../../dtos/products.dto'
 import { BadRequestError } from '../../../../errors'
 import { ProductsDao } from '../interfaces/products.dao'
-import { ProductModel } from '../schemas/product.model'
 import { Model } from 'mongoose'
 import { IBook } from '../interfaces/book.interface'
-import { BookModel } from '../schemas/book.model'
 
 export class ProductsMongooseDao implements ProductsDao {
-    constructor(private productModel: Model<IProduct>) {
+    private productModel: Model<IProduct>;
+    constructor(productModel: Model<any>) {
         this.productModel = productModel
     }
 

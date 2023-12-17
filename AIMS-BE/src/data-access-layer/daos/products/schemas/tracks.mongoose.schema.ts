@@ -1,5 +1,5 @@
 import mongoose, { Schema, model } from 'mongoose'
-import { TrackModelDto } from '../../../../dtos/models/track-model.dto'
+import { TrackModelDto } from '../interfaces/track-model.dto'
 
 const trackSchema = new Schema<TrackModelDto>({
     artist: {
