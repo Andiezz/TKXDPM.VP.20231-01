@@ -11,7 +11,7 @@ export class BaseResponse {
         return this
     }
 
-    fail(message: string, data: Object) {
+    fail(message: string, data?: Object) {
         this.message = message
         this.data = data || undefined
         return this

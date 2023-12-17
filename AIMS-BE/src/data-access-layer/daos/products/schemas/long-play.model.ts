@@ -2,7 +2,7 @@ import { Model, Schema } from 'mongoose'
 import { IProduct } from '../interfaces/product.interface'
 import { ProductModel } from './product.model'
 import { KIND } from '../../../../configs/enums'
-import { ILongPlay } from '../interfaces/long-play-model.dto'
+import { ILongPlay } from '../interfaces/long-play.interface'
 
 export class LongPlayModel {
     private static instance: Model<ILongPlay>
