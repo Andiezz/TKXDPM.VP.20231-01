@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from 'mongoose'
-import { TrackModelDto } from '../../../../dtos/models/track-model.dto'
+import { ITrack } from '../interfaces/track.interface'
 
-const trackSchema = new Schema<TrackModelDto>({
+const trackSchema = new Schema<ITrack>({
     artist: {
         type: String,
         required: true,
@@ -25,5 +25,5 @@ const trackSchema = new Schema<TrackModelDto>({
     },
 })
 
-const Track = model<TrackModelDto>('Track', trackSchema)
+const Track = model<ITrack>('Track', trackSchema)
 export default Track

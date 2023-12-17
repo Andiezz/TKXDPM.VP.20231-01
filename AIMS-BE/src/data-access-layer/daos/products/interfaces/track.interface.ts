@@ -1,6 +1,4 @@
-import { ObjectId } from '../../utils/types'
-
-export interface TrackModelDto {
+export interface ITrack {
     id: number | ObjectId | string
     artist: string
     recordLabel: string
