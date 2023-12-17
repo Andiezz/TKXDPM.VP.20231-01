@@ -79,12 +79,15 @@
 -   Assigned tasks:
 
     -   Split app class
+    -   User management use case
 
 -   Implementation details:
     -   Pull Request(s):
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/11]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/14]()
     -   Specific implementation details:
         -   Split app class
+        -   Finish user management use case
 </details>
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
