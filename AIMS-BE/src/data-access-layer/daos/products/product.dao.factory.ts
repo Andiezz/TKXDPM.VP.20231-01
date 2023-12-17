@@ -1,6 +1,6 @@
 import { Model } from 'mongoose'
 import { KIND } from '../../../configs/enums'
-import { ProductsDao } from './interfaces/products.dao'
+import { ProductsDao } from './interfaces/products.dao.interface'
 import BooksMongooseDao from './providers/books.mongoose.dao'
 import { IBook } from './interfaces/book.interface'
 import { BadRequestError } from '../../../errors'

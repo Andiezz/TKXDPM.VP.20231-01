@@ -5,10 +5,13 @@ import {
     QueryProductDto,
 } from '../../../../dtos/products.dto'
 import { BadRequestError } from '../../../../errors'
-import { ProductsDao } from '../interfaces/products.dao'
+import { ProductsDao } from '../interfaces/products.dao.interface'
 import { Model } from 'mongoose'
-import { IBook } from '../interfaces/book.interface'
 import { calculateSkip } from '../../../../utils/calculate'
+import {
+    PAGINATION_DEFAULT,
+    PAGINATION_SORT,
+} from '../../../../configs/constants'
 
 export class ProductsMongooseDao implements ProductsDao {
     private productModel: Model<IProduct>
@@ -50,9 +53,15 @@ export class ProductsMongooseDao implements ProductsDao {
     }
 
     public async findAll(query: QueryProductDto): Promise<IProduct[]> {
-        const { keyword, limit, page, sortBy, sortOrder } = query
-        limit 
-        const skip = calculateSkip(page, limit);
+        let { keyword, limit, page, sortBy, sortOrder } = query
+
+        //set default values
+        !limit && (limit = PAGINATION_DEFAULT.LIMIT)
+        !page && (page = PAGINATION_DEFAULT.PAGE)
+        !sortBy && (sortBy = PAGINATION_SORT.SORT_BY)
+        !sortOrder && (sortOrder = PAGINATION_SORT.ASC)
+
+        const skip = calculateSkip(page, limit)
 
         const matchFilters: any = {}
         if (keyword) {
@@ -63,7 +72,7 @@ export class ProductsMongooseDao implements ProductsDao {
             ]
         }
 
-        const results = await this.productModel.aggregate([
+        const results = (await this.productModel.aggregate([
             {
                 $set: {
                     id: {
@@ -76,7 +85,10 @@ export class ProductsMongooseDao implements ProductsDao {
             },
             {
                 $facet: {
-                    paginatedResults: [{ $skip: skip }, { $limit: limit }],
+                    paginatedResults: [
+                        { $skip: skip },
+                        { $limit: limit as number },
+                    ],
                     totalCount: [{ $count: 'count' }],
                 },
             },
@@ -91,7 +103,9 @@ export class ProductsMongooseDao implements ProductsDao {
             {
                 $unset: ['totalCount'],
             },
-        ])
+        ])) as IProduct[]
+
+        return results
     }
 
     public async delete(id: string): Promise<boolean> {
@@ -105,13 +119,23 @@ export class ProductsMongooseDao implements ProductsDao {
         return true
     }
 
-    public async isBarCodeExist(barCode: string): Promise<boolean> {
+    public async isBarCodeExist(
+        barCode: string,
+        id?: string
+    ): Promise<boolean> {
         const isBarCodeExist = await this.productModel.findOne({
-            barcode: barCode,
+            $and: [
+                {
+                    barcode: { $eq: barCode },
+                },
+                {
+                    _id: { $ne: new ObjectId(id) },
+                },
+            ],
         })
         if (isBarCodeExist) {
-            return false
+            return true
         }
-        return true
+        return false
     }
 }

@@ -1,7 +1,6 @@
 import { IProduct } from './product.interface'
 
 export interface IDvd extends IProduct {
-    id: number | ObjectId | string
     discType: string
     director: string
     runtime: number
