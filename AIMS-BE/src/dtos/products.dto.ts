@@ -3,4 +3,4 @@ import { IPaginationDto } from './pagination.dto'
 
 export type CreateProductDto = Omit<IProduct, 'id'>
 export type UpdateProductDto = Omit<IProduct, 'id'>
-export type QueryProductDto = IPaginationDto & { keyword: string }
+export type QueryProductDto = IPaginationDto & { keyword?: string }
