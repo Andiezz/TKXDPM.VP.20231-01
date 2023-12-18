@@ -110,7 +110,57 @@
 -   Assigned tasks:
     
     - Refactor user related components
-    - Finish user management use case'
+    - Finish user management use case
+    
+-   Implementation details:
+    - Pull Request(s): 
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/10]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/13]()
+</details>
+</details>
+
+<details>
+  <summary>W3: 12/12/2023~18/12/2023 </summary>
+<br>
+<details>
+<summary>Vũ Thành An </summary>
+<br>
+
+-   Assigned tasks:
+
+    -   Split app class
+    -   User management use case
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/11]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/14]()
+    -   Specific implementation details:
+        -   Split app class
+        -   Finish user management use case
+</details>
+<details>
+<summary>Nguyễn Ngọc Ánh </summary>
+<br>
+ 
+-   Assigned tasks: 
+
+    -  Replace daos according to new structure
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/12]()
+    -   Specific implementation details:
+        -  Replace daos
+</details>
+<details>
+<summary>Đỗ Duy Anh </summary>
+<br>
+    
+-   Assigned tasks:
+    
+    - Refactor user related components
+    - Finish user management use case
     
 -   Implementation details:
     - Pull Request(s): 
