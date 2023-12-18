@@ -37,14 +37,12 @@ export class TrackController implements Controller {
         this.router.get(
             `${this.path}/:id`,
             jwtAuthGuard as RequestHandler,
-            rolesGuard([USER_ROLE.ADMIN]) as RequestHandler,
             tryCatch(this.getTrack)
         )
 
         this.router.get(
             `${this.path}`,
             jwtAuthGuard as RequestHandler,
-            rolesGuard([USER_ROLE.ADMIN]) as RequestHandler,
             tryCatch(this.getTracks)
         )
 

@@ -19,9 +19,9 @@ export class ProductsMongooseDao implements ProductsDao {
         this.productModel = productModel
     }
 
-    public async create(createProductDto: CreateProductDto): Promise<boolean> {
-        await this.productModel.create(createProductDto)
-        return true
+    public async create(createProductDto: CreateProductDto): Promise<ObjectId> {
+        const result = await this.productModel.create(createProductDto)
+        return result._id
     }
 
     public async update(

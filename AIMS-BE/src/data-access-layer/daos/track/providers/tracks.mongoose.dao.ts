@@ -25,6 +25,13 @@ export class TracksMongooseDao implements TracksDao {
         return true
     }
 
+    public async createMany(
+        createTrackDtos: Array<CreateTrackDto>
+    ): Promise<boolean> {
+        await this.trackModel.insertMany(createTrackDtos)
+        return true
+    }
+
     public async update(
         id: string,
         updateTrackDto: UpdateTrackDto
@@ -84,7 +91,7 @@ export class TracksMongooseDao implements TracksDao {
                     },
                     cdIdStr: {
                         $toString: '$cdId',
-                    }
+                    },
                 },
             },
             {
@@ -131,6 +138,11 @@ export class TracksMongooseDao implements TracksDao {
 
         await this.trackModel.findByIdAndDelete(new ObjectId(id))
 
+        return true
+    }
+
+    public async deleteByCdId(cdId: string): Promise<boolean> {
+        await this.trackModel.deleteMany({ cdId: new ObjectId(cdId) })
         return true
     }
 }
