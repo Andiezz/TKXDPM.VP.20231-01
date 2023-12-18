@@ -12,8 +12,8 @@ import { compareHash, hashData } from '../../utils/security'
 import {
     NotificationService,
     RecipientDto,
+    MailService,
 } from '../../subsystems/notification-service'
-import { MailService } from '../../subsystems/notification-service/providers/mail.service'
 
 export class UserManagementController implements Controller {
     public readonly path = '/users'

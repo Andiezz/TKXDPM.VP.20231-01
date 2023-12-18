@@ -1,4 +1,5 @@
-import { body, query } from 'express-validator'
+import { ValidationChain, body, param } from 'express-validator'
+import { SUPPORTED_CURRENCY } from '../configs/enums'
 
 export const createUser = [
     body('email')
@@ -33,4 +34,47 @@ export const changePassword = [
         .isLength({ min: 3 })
         .withMessage('Password must have atleast 3 character long')
         .trim(),
+]
+
+export const payRequest = [
+    body('invoiceId').exists().withMessage('Invoice id is required'),
+    body('payment_method').exists().withMessage('Payment method is required'),
+    body('amount')
+        .exists()
+        .withMessage('Amount is required')
+        .isNumeric()
+        .withMessage('Amount must be a numeric value'),
+    body('currency')
+        .exists()
+        .withMessage('Currency is required')
+        .isIn([SUPPORTED_CURRENCY.VND])
+        .withMessage('Unsupported currency'),
+]
+
+export const refundRequest = [
+    body('payment_method').exists().withMessage('Payment method is required'),
+    body('payment_id').exists().withMessage('Payment id is required'),
+]
+
+export const saveTxnRequest = [
+    body('invoiceId').exists().withMessage('Invoice id is required'),
+    body('paymentMethod').exists().withMessage('Payment method is required'),
+    body('amount')
+        .exists()
+        .withMessage('Amount is required')
+        .isNumeric()
+        .withMessage('Amount must be a numeric value'),
+    ,
+    body('transactionNo')
+        .exists()
+        .withMessage('Transaction number is required'),
+    body('paymentDate').exists().withMessage('Payment date is required'),
+]
+
+export const captureTransaction = [
+    param('transactionId')
+        .exists()
+        .withMessage('Transaction id is required')
+        .isMongoId(),
+    body('status').exists().withMessage('Status is required'),
 ]

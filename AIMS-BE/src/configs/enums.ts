@@ -7,3 +7,8 @@ export enum USER_ROLE {
     ADMIN = 'admin',
     MANAGER = 'manager',
 }
+
+export enum SUPPORTED_CURRENCY {
+    VND = 'vnd',
+    USD = 'usd',
+}
