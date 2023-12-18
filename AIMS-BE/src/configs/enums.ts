@@ -21,6 +21,7 @@ export enum ORDER_STATUS {
     CANCELED = 2,
     REFUNDED = 3
 }
+
 export enum SUPPORTED_CURRENCY {
     VND = 'vnd',
     USD = 'usd',
