@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose'
+import mongoose, { Model, Schema, model } from 'mongoose'
 import { Document } from 'mongodb'
 import { IOrderProduct } from '../interface/order-product.interface'
 
@@ -7,7 +7,7 @@ import { IOrderProduct } from '../interface/order-product.interface'
  * the unique singleton instance.
  */
 export class OrderProductModel {
-    private static instance: Document
+    private static instance: Model<IOrderProduct>
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -21,7 +21,7 @@ export class OrderProductModel {
      * This implementation let you subclass the Singleton class while keeping
      * just one instance of each subclass around.
      */
-    public static getInstance(): OrderProductModel {
+    public static getInstance(): Model<IOrderProduct> {
         if (!OrderProductModel.instance) {
             const orderProductSchema = new Schema<IOrderProduct>({
                 productId: {

@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { BadRequestError } from '../../../../errors'
-import mongoose, { Schema, model } from 'mongoose'
+import mongoose, { Model, Schema, model } from 'mongoose'
 import { Document } from 'mongodb'
 import { CreateOrderProductDto } from '../../../../dtos/order-product.dto'
 import { OrderProductDao } from '../interface/order-product.dao'
@@ -9,8 +9,7 @@ import { OrderProductModel } from '../schemas/order-product.model'
 
 export class OrderProductMongooseDao implements OrderProductDao {
     
-    constructor(private orderProductModel: Document = OrderProductModel.getInstance()){}
-
+    constructor(private orderProductModel: Model<IOrderProduct> = OrderProductModel.getInstance()) {}
 
     public async findAll(): Promise<IOrderProduct[] | null> {
         throw new Error('Method not implemented.')
@@ -52,5 +51,14 @@ export class OrderProductMongooseDao implements OrderProductDao {
         const { _id, ...result } = OrderProductDoc.toObject()
         result.id = _id
         return result
+    }
+
+    public async findProductsByOrderId(id: string): Promise<Document[] | null> {
+        const orderProductDocs = await this.orderProductModel.find({ orderId: id }).populate('productId')
+        
+        if (!orderProductDocs || orderProductDocs.length === 0) {
+            return null
+        }
+        return orderProductDocs
     }
 }

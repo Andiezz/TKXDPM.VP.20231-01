@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from 'mongoose'
+import mongoose, { Model, Schema, model } from 'mongoose'
 import { Document } from 'mongodb'
 import { ICartProduct } from '../interfaces/cart-product.interface'
 
@@ -7,7 +7,7 @@ import { ICartProduct } from '../interfaces/cart-product.interface'
  * the unique singleton instance.
  */
 export class CartProductModel {
-    private static instance: Document
+    private static instance: Model<ICartProduct>
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -21,7 +21,7 @@ export class CartProductModel {
      * This implementation let you subclass the Singleton class while keeping
      * just one instance of each subclass around.
      */
-    public static getInstance(): CartProductModel {
+    public static getInstance(): Model<ICartProduct> {
         if (!CartProductModel.instance) {
             const cartProductSchema = new Schema<ICartProduct>({
                 productId: {
@@ -40,7 +40,7 @@ export class CartProductModel {
                 },
             },{ timestamps: true }
             )
-            CartProductModel.instance = model('User', cartProductSchema)
+            CartProductModel.instance = model('CartProduct', cartProductSchema)
         }
         return CartProductModel.instance
     }
