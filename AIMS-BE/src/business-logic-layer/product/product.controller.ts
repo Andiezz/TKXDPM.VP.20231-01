@@ -126,7 +126,7 @@ export class ProductController implements Controller {
         req: Request,
         res: Response
     ): Promise<Response> => {
-        const query = <QueryProductDto>req.body
+        const query = <QueryProductDto>req.query
         const products = await this.productDao.findAll(query)
         if (products.length === 0) {
             new BaseResponse().fail('No product found')
