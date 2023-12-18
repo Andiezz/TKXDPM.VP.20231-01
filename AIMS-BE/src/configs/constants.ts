@@ -19,3 +19,9 @@ export enum SORT_ORDER {
     ASC = 1,
     DESC = -1,
 }
+
+export const TRANSACTION_STATUS = {
+    PENDING: 0,
+    SUCCEED: 1,
+    FAILED: 2,
+}
