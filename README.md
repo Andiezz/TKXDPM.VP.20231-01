@@ -145,13 +145,17 @@
  
 -   Assigned tasks: 
 
-    -  Replace daos according to new structure
+    -  Add order respository, cart respository
+    -  Add delivery-info-management, order-management, cart-management
 
 -   Implementation details:
     -   Pull Request(s):
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/12]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/15]()
     -   Specific implementation details:
-        -  Replace daos
+        -  implements implementations of functions to implement APIs
+        -  Cart : Create/Update/Reset with business logic
+        -  Order : Create/Get with business logic
+        -  Delivery : Create/Get with business logic
 </details>
 <details>
 <summary>Đỗ Duy Anh </summary>
