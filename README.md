@@ -159,13 +159,11 @@
     
 -   Assigned tasks:
     
-    - Refactor user related components
-    - Finish user management use case
+    - Intergrate paypal and vnpay payment
     
 -   Implementation details:
     - Pull Request(s): 
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/10]()
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/13]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
 </details>
 </details>
 
