@@ -1,5 +1,5 @@
 import { Document } from 'mongodb'
-import { Schema, model } from 'mongoose'
+import { Model, Schema, model } from 'mongoose'
 import { USER_STATUS } from '../../../../configs/constants'
 import { USER_ROLE } from '../../../../configs/enums'
 import { IUser } from '../interfaces/user.interface'
@@ -9,7 +9,7 @@ import { IUser } from '../interfaces/user.interface'
  * the unique singleton instance.
  */
 export class UserModel {
-    private static instance: Document
+    private static instance: Model<IUser>
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -23,7 +23,7 @@ export class UserModel {
      * This implementation let you subclass the Singleton class while keeping
      * just one instance of each subclass around.
      */
-    public static getInstance(): UserModel {
+    public static getInstance(): Model<IUser> {
         if (!UserModel.instance) {
             const userSchema = new Schema<IUser>(
                 {

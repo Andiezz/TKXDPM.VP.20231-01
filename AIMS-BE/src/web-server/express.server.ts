@@ -18,6 +18,8 @@ class ExpressServer {
     }
 
     private initializeMiddleware(): void {
+        this.express.set('view engine', 'ejs')
+        this.express.use(express.static('public'))
         this.express.use(express.json())
         this.express.use(express.urlencoded({ extended: true }))
     }
@@ -42,4 +44,4 @@ class ExpressServer {
     }
 }
 
-export default ExpressServer;
+export default ExpressServer

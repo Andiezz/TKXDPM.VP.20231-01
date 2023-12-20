@@ -7,6 +7,7 @@ import { OrderManagementController } from './business-logic-layer/order-manageme
 import { ProductController } from './business-logic-layer/product/product.controller'
 import { TrackController } from './business-logic-layer/track'
 import { UserManagementController } from './business-logic-layer/user-management/index'
+import { PaymentController } from './business-logic-layer/payment'
 
 new App([
     new AuthController(),
@@ -17,4 +18,5 @@ new App([
     new CartManagementController(),
     new DeliveryInfoManagementController(),
     new OrderManagementController(),
+    new PaymentController(),
 ])
