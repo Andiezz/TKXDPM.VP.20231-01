@@ -48,6 +48,14 @@ export class DeliveryInfoModel {
                     type: String,
                     required: true,
                 },
+                time: {
+                    type: Date,
+                    required: true,
+                },
+                deliveryMethod: {
+                    type: String,
+                    required: true,
+                },
             }
             )
             DeliveryInfoModel.instance = model('DeliveryInfo', deliveryInfoSchema)

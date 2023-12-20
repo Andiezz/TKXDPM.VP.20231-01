@@ -14,3 +14,11 @@ export enum KIND {
     DVD = 'dvd',
     LONG_PLAY = 'long-play',
 }
+
+
+export enum ORDER_STATUS {
+    PENDING = 0,
+    PAID = 1,
+    CANCELED = 2,
+    REFUNDED = 3
+}
