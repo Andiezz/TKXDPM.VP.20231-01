@@ -9,9 +9,12 @@ import { UpdateCartDto } from '../../../../dtos/cart.dto'
 
 //Data coupling
 export class CartMongooseDao implements CartDao {
-    constructor(private cartModel: Document =CartModel.getInstance()){ }
+    constructor(private cartModel: Document = CartModel.getInstance()) {}
 
-    public async updateInfo(cartId: string, updateCartInfoDto: UpdateCartDto): Promise<ICart> {
+    public async updateInfo(
+        cartId: string,
+        updateCartInfoDto: UpdateCartDto
+    ): Promise<ICart> {
         const userDoc = await this.cartModel.findByIdAndUpdate(cartId, {
             totalPrice: updateCartInfoDto.totalPrice,
             totalPriceVat: updateCartInfoDto.totalPriceVat,
@@ -42,15 +45,16 @@ export class CartMongooseDao implements CartDao {
             .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo mới nhất đến cũ nhất
 
         if (cartDoc) {
-            const { _id } = cartDoc.toObject();
-            return _id.toString();
+            const { _id } = cartDoc.toObject()
+            return _id.toString()
         } else {
-            return null; // Trả về null nếu không tìm thấy giỏ hàng
+            return null // Trả về null nếu không tìm thấy giỏ hàng
         }
     }
-    public async seedCart(): Promise<void> {
+    public async seedCart(userId: string): Promise<void> {
         try {
             await this.cartModel.create({
+                userId: userId,
                 totalPrice: 0,
                 totalPriceVat: 0,
             })
@@ -59,10 +63,21 @@ export class CartMongooseDao implements CartDao {
             console.error('Seeded cart fail')
         }
     }
-    
+
+    public async getCartDetail(userId: string): Promise<ICart | null> {
+        const cartDoc = await this.cartModel.findOne(userId)
+        if (!cartDoc) {
+            return null
+        }
+
+        const { _id, ...result } = cartDoc.toObject()
+        result.id = _id
+        return result
+    }
+
     public async resetCart(cartId: string): Promise<void> {
         try {
-            await this.cartModel.findByIdAndUpdate(cartId,{
+            await this.cartModel.findByIdAndUpdate(cartId, {
                 totalPrice: 0,
                 totalPriceVat: 0,
             })
@@ -71,5 +86,4 @@ export class CartMongooseDao implements CartDao {
             console.error('Reseted cart fail')
         }
     }
-    
 }
