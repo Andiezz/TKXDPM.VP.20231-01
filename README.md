@@ -4,14 +4,10 @@
 
 -   [TKXDPM.VP.20231-01](#tkxdpmvP20231-01)
     -   [Table of contents](#table-of-contents)
-    -   [Quick start](#quick-start)
-    -   [What's included](#whats-included)
+    -   [Group Information](#group-information)
     -   [Report Content](#report-content)
-    -   [Pull request template](#pull-request-template)
 
-## Quick start
-
-Before using this Github repository, everyone needs to register their group information using the table below:
+## Group Information
 
 | Name            | Role        |
 | :-------------- | :---------- |
@@ -19,118 +15,156 @@ Before using this Github repository, everyone needs to register their group info
 | Đỗ Duy Anh      | Member      |
 | Nguyễn Ngọc Ánh | Member      |
 
-## What's included
-
-The recommended structure is as follows:
-
--   `AIMS`: folder containing the team's AIMS base code
--   `assets`: folder containing images that you want to include in the report file
--   `README.md`: weekly report file, individuals are required to update their tasks and how their do it into this file
--   `Template.md`: template for the weekly report
--   `pull_request_template.md`: pull request's description template
-
 ## Report Content
 
-The recommended report structure will have a format as follows:
-
 <details>
-  <summary>Week xx Report, where you record the week as Wxx: from date ~ to date. Example: W1: 01/10/2023~08/10/2023 </summary>
+  <summary>W1: 28/11/2023~05/12/2023 </summary>
 <br>
 <details>
-<summary>Team Member 1</summary>
+<summary>Vũ Thành An </summary>
 <br>
 
 -   Assigned tasks:
 
-    -   Task 1
-    -   Task 2
-    -   ...
+    -   Build models
 
 -   Implementation details:
-    -   Pull Request(s): [Attach links to your pull requests here. You can attach multiple pull requests]()
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/1]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/2]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/5]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/7]()
     -   Specific implementation details:
-        -   Describe specific in detail what you did last week
-        -   You can attach images if you want
-
+        -   Build models for all entities
 </details>
-
 <details>
-<summary>Team Member 2</summary>
+<summary>Nguyễn Ngọc Ánh </summary>
 <br>
 
 -   Assigned tasks:
 
-    -   Task 1
-    -   Task 2
-    -   ...
+    -  Add DAOS schemas 
 
 -   Implementation details:
-    -   Pull Request(s): [Attach links to your pull requests here. You can attach multiple pull requests]()
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/4]()
     -   Specific implementation details:
-        -   Describe specific in detail what you did last week
-        -   You can attach images if you want
+        -  Add DAOS schemas 
+</details>
+<details>
+<summary>Đỗ Duy Anh </summary>
+<br>
 
+-   Assigned tasks:
+
+    -  Build code base
+    -  Refactor project structure
+    -  Authentication & Authorization
+
+-   Implementation details:
+    -   Pull Request(s):
+          - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/6]()
+          - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/8]()
+    -   Specific implementation details:
+</details>
 </details>
 
+<details>
+  <summary>W2: 5/12/2023~12/12/2023 </summary>
+<br>
+<details>
+<summary>Vũ Thành An </summary>
+<br>
+
+-   Assigned tasks:
+
+    -   Split app class
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/11]()
+    -   Specific implementation details:
+        -   Split app class
+</details>
+<details>
+<summary>Nguyễn Ngọc Ánh </summary>
+<br>
+ 
+-   Assigned tasks: 
+
+    -  Replace daos according to new structure
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/12]()
+    -   Specific implementation details:
+        -  Replace daos
+</details>
+<details>
+<summary>Đỗ Duy Anh </summary>
+<br>
+    
+-   Assigned tasks:
+    
+    - Refactor user related components
+    - Finish user management use case
+    
+-   Implementation details:
+    - Pull Request(s): 
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/10]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/13]()
+</details>
+</details>
+
+<details>
+  <summary>W3: 12/12/2023~18/12/2023 </summary>
+<br>
+<details>
+<summary>Vũ Thành An </summary>
+<br>
+
+-   Assigned tasks:
+
+    -   User management use case
+    -   Add CD Track repository
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/14]()
+    -   Specific implementation details:
+        -   Finish user management use case
+        -   Finish adding CD Track repository
+</details>
+<details>
+<summary>Nguyễn Ngọc Ánh </summary>
+<br>
+ 
+-   Assigned tasks: 
+
+    -  Add order respository, cart respository
+    -  Add delivery-info-management, order-management, cart-management
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/15]()
+    -   Specific implementation details:
+        -  implements implementations of functions to implement APIs
+        -  Cart : Create/Update/Reset with business logic
+        -  Order : Create/Get with business logic
+        -  Delivery : Create/Get with business logic
+</details>
+<details>
+<summary>Đỗ Duy Anh </summary>
+<br>
+    
+-   Assigned tasks:
+    
+    - Intergrate paypal and vnpay payment
+    
+-   Implementation details:
+    - Pull Request(s): 
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
+</details>
 </details>
 
 ---
-
-<details>
-  <summary>W2: 01/10/2023~08/10/2023 </summary>
-<br>
-<details>
-<summary>Team Member 1</summary>
-<br>
-
--   Assigned tasks:
-
-    -   Task 1
-    -   Task 2
-    -   ...
-
--   Implementation details:
-    -   Pull Request(s): [Attach links to your pull requests here. You can attach multiple pull requests]()
-    -   Specific implementation details:
-        -   Describe specific in detail what you did last week
-        -   You can attach images if you want
-
-</details>
-
-<details>
-<summary>Team Member 2</summary>
-<br>
-
--   Assigned tasks:
-
-    -   Task 1
-    -   Task 2
-    -   ...
-
--   Implementation details:
-    -   Pull Request(s): [Attach links to your pull requests here. You can attach multiple pull requests]()
-    -   Specific implementation details:
-        -   Describe specific in detail what you did last week
-        -   You can attach images if you want
-
-</details>
-
-</details>
-
----
-
-## Pull request template
-
--   You are required to create a pull request according to these steps:
-    -   Use the `pull_request_template.md` file when writing the description section in the pull request
-    -   The `title` of the pull request should follow the format below:
-        -   `Feature/Topic/Hotfix/Fix: Task Name`. Example: `Feature: Build View Controller`
-        -   Explain:
-            -   `Feature`: When the branch has the task of changing the main code of the project
-            -   `Topic`: When the branch only has the task of research, without directly changing the main code of the project
-            -   `Hotfix`: When you discover code on the production environment
-            -   `Fix`: When you discover a bug in a branch that has not been merged into the production environment
-    -   After creating the pull request, decide who will merge the code within your team.
-    -   You don't need to follow the Wxx format as I mentioned before
-    -   Each person will have multiple pull requests
-    -   Whoever makes the pull request, attach that pull request to the report you attached above. Section `pull request(s)`
