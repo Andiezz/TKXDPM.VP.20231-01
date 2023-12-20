@@ -12,4 +12,5 @@ export interface IProduct {
     productDimensions: ProductDimension
     barcode: string
     kind: string
+    supportRush: boolean
 }

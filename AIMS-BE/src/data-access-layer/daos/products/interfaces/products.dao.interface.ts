@@ -8,4 +8,5 @@ export interface ProductsDao {
     findAll(query: QueryProductDto): Promise<IProduct[]>
     delete(id: string): Promise<boolean>
     isBarCodeExist(barCode: string, id?: string): Promise<boolean>
+    findMany(ids: string[]): Promise<IProduct[]>
 }
