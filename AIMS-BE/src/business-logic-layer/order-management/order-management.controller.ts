@@ -15,44 +15,41 @@ import {
 } from '../../subsystems/notification-service'
 import { MailService } from '../../subsystems/notification-service/providers/mail.service'
 import { OrderRepository } from '../../data-access-layer/repositories/orders/order.respository'
+import { CreateOrderFromCart } from '../../dtos/order-product.dto'
 
 export class OrderManagementController implements Controller {
-
     public readonly path = '/order'
     public readonly router = Router()
     private notificationService: NotificationService
-    private orderRepository:OrderRepository
+    private orderRepository: OrderRepository
 
     constructor() {
         this.notificationService = MailService.getInstance()
-        this.orderRepository = new OrderRepository();
+        this.orderRepository = new OrderRepository()
         this.initializeRoutes()
     }
 
     private initializeRoutes(): void {
-        this.router.get(
-            `${this.path}/create`,
-            tryCatch(this.createDeliveryInfo)
-        )
-        this.router.get(
-            `${this.path}/getOrder`,
-            tryCatch(this.getOrder)
-        )
+        this.router.post(`${this.path}/create`, tryCatch(this.createOrder))
+        this.router.get(`${this.path}/getOrder`, tryCatch(this.getOrder))
     }
 
-    private createDeliveryInfo = async (
+    private createOrder = async (
         req: Request,
         res: Response
     ): Promise<Response | void> => {
-    
-        await this.orderRepository.createOrderFromCart()
-        return res.json(new BaseResponse().ok('Create new Order info'))
+        const { listProductId, deliveryInfo } = req.body
+        const result = await this.orderRepository.createOrderFromCart(
+            listProductId,
+            deliveryInfo
+        )
+        return res.json(new BaseResponse().ok('Info: ' + result))
     }
 
-    private getOrder = async (  
+    private getOrder = async (
         req: Request,
         res: Response
-        ): Promise<Response | void> => {
+    ): Promise<Response | void> => {
         const cartIdObject = await this.orderRepository.getOrderInfo()
         return res.json(
             new BaseResponse().ok('Fetched Order info', {

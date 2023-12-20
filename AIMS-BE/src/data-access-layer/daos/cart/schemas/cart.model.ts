@@ -2,7 +2,6 @@ import { Document } from 'mongodb'
 import mongoose, { Schema, model } from 'mongoose'
 import { ICart } from '../interfaces/cart.interface'
 
-
 /**
  * The Singleton class defines the `getInstance` method that lets clients access
  * the unique singleton instance.
@@ -24,22 +23,28 @@ export class CartModel {
      */
     public static getInstance(): CartModel {
         if (!CartModel.instance) {
-            const cartSchema = new Schema<ICart>({
-                totalPrice: {
-                    type: Number,
-                    required: true,
+            const cartSchema = new Schema<ICart>(
+                {
+                    userId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'DeliveryInfo',
+                        required: true,
+                    },
+                    totalPrice: {
+                        type: Number,
+                        required: true,
+                    },
+                    totalPriceVat: {
+                        type: Number,
+                        required: true,
+                    },
                 },
-                totalPriceVat: {
-                    type: Number,
-                    required: true,
-                },
-            },
-            { timestamps: true })
+                { timestamps: true }
+            )
 
             CartModel.instance = model('Cart', cartSchema)
         }
 
         return CartModel.instance
     }
-    
 }
