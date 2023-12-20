@@ -78,7 +78,7 @@
 
 -   Assigned tasks:
 
-    -   Split app class
+    -   Split app class (Coupling and Cohesion exercise)
 
 -   Implementation details:
     -   Pull Request(s):
