@@ -138,4 +138,12 @@ export class ProductsMongooseDao implements ProductsDao {
         }
         return false
     }
+
+    public async findMany(ids: string[]): Promise<IProduct[]> {
+        const productObjectIds = ids.map((id) => new ObjectId(id))
+        const products = await this.productModel.find({
+            _id: { $in: productObjectIds },
+        })
+        return products
+    }
 }

@@ -46,6 +46,10 @@ export class ProductModel {
                         type: String,
                         required: true,
                     },
+                    supportRush: {
+                        type: Boolean,
+                        required: true,
+                    },
                 },
                 { timestamps: true, discriminatorKey: 'kind' }
             )

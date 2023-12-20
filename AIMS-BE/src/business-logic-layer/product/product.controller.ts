@@ -31,7 +31,7 @@ export class ProductController implements Controller {
         this.router.post(
             `${this.path}`,
             jwtAuthGuard as RequestHandler,
-            rolesGuard([USER_ROLE.MANAGER]) as RequestHandler,
+            rolesGuard([USER_ROLE.MANAGER, USER_ROLE.ADMIN]) as RequestHandler,
             tryCatch(this.createProduct)
         )
 
