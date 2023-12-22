@@ -6,10 +6,10 @@ import { OrderDao } from '../interfaces/order.dao'
 import { OrderModel } from '../schemas/order.model'
 import { IOrder } from '../interfaces/order.interface'
 import { CreateOrderDto } from '../../../../dtos/order.dto'
+import { ORDER_STATUS } from '../../../../configs/enums'
 
 export class OrderMongooseDao implements OrderDao {
-
-    constructor(private orderModel: Document = OrderModel.getInstance()){}
+    constructor(private orderModel: Document = OrderModel.getInstance()) {}
     public async findById(id: string): Promise<IOrder | null> {
         const OrderProductDoc = await this.orderModel.findById(id)
         if (!OrderProductDoc) {
@@ -35,13 +35,23 @@ export class OrderMongooseDao implements OrderDao {
             .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo mới nhất đến cũ nhất
 
         if (deliveryInfoDoc) {
-            const { _id } = deliveryInfoDoc.toObject();
-            return _id.toString();
+            const { _id } = deliveryInfoDoc.toObject()
+            return _id.toString()
         } else {
-            return null; // Trả về null nếu không tìm thấy giỏ hàng
+            return null // Trả về null nếu không tìm thấy giỏ hàng
         }
     }
 
-    
+    public async updateStatus(
+        id: string,
+        status: ORDER_STATUS
+    ): Promise<IOrder> {
+        const orderDoc = await this.orderModel.findByIdAndUpdate(id, {
+            status: status,
+        })
+        const { _id, ...result } = orderDoc.toObject()
+        result.id = _id
 
+        return result
+    }
 }

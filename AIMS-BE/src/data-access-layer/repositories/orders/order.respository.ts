@@ -52,17 +52,21 @@ export class OrderRepository {
                 return 'Address not available in your province'
             }
         }
+        const productIds = listProductsCart.map((productCart) =>
+            productCart.productId.toString()
+        )
+        const listProductDetail = await this.productDao.findMany(productIds)
 
-        // Create Delivery Detail
-        await this.deliveryInfoDao.create(createDeliveryInfoDto)
-        // Get ID delivery
-        const deliveryInfoIdObject =
-            await this.deliveryInfoDao.getLatestDeliveryInfoId()
-        if (!deliveryInfoIdObject) {
-            throw new BadRequestError('DeliveryInfo error')
+        let checkProductRush = 0
+        for (const product of listProductDetail) {
+            if (product.supportRush) {
+                checkProductRush = 1
+                break
+            }
         }
-        const deliveryInfoId: string = deliveryInfoIdObject.toString()
-
+        if (checkProductRush == 0) {
+            return 'All product not available'
+        }
         //Caculate Price
         let totalPrice = 0
         let widthMax = 0
@@ -82,6 +86,16 @@ export class OrderRepository {
                 widthMax = productDetail.productDimensions.width
             }
         }
+
+        // Create Delivery Detail
+        await this.deliveryInfoDao.create(createDeliveryInfoDto)
+        // Get ID delivery
+        const deliveryInfoIdObject =
+            await this.deliveryInfoDao.getLatestDeliveryInfoId()
+        if (!deliveryInfoIdObject) {
+            throw new BadRequestError('DeliveryInfo error')
+        }
+        const deliveryInfoId: string = deliveryInfoIdObject.toString()
 
         //Caculate ShippingCost
         let shippingCost
@@ -113,6 +127,7 @@ export class OrderRepository {
             deliveryInfoId: deliveryInfoId,
             shippingCost: shippingCost,
             status: ORDER_STATUS.PENDING,
+            totalAmount: totalPrice * 1.1 + shippingCost,
         }
         // Create new order
         const order = await this.orderDao.create(createOrderDto)
@@ -132,18 +147,13 @@ export class OrderRepository {
             await this.orderProductDao.create(createOrderProductDto)
         }
 
-        return 'Ok'
+        return 'Create new Order info'
     }
 
-    public async getOrderInfo() {
-        const orderIdObject = await this.orderDao.getLatestOrderId()
-        if (!orderIdObject) {
-            throw new BadRequestError('Order ID not found')
-        }
-        const orderId: string = orderIdObject.toString()
+    public async getOrderInfo(orderId: string) {
         const orderDoc = await this.orderDao.findById(orderId)
         if (!orderDoc) {
-            throw new BadRequestError('cart not found')
+            throw new BadRequestError('Order not found')
         }
         const {
             totalPrice,
@@ -151,20 +161,37 @@ export class OrderRepository {
             status,
             shippingCost,
             deliveryInfoId,
+            totalAmount,
         } = orderDoc
         const listProduct =
             await this.orderProductDao.findProductsByOrderId(orderId)
+        if (!listProduct) {
+            throw new BadRequestError('DeliveryInfo error')
+        }
+
+        // list productSupportRush and listProductNomal
+        let listProductRush = []
+        let listProductNomal = []
+        for (const product of listProduct) {
+            if (product.productId.supportRush == true) {
+                listProductRush.push(product)
+            } else {
+                listProductNomal.push(product)
+            }
+        }
         const deliveryInfo = await this.deliveryInfoDao.findById(
             deliveryInfoId.toString()
         )
         return {
             orderId: orderId,
-            listProduct,
+            listProductRush,
+            listProductNomal,
             deliveryInfo,
             totalPrice,
             totalPriceVAT,
             status,
             shippingCost,
+            totalAmount,
         }
     }
 }
