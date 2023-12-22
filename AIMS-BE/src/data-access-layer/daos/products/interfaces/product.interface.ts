@@ -1,7 +1,6 @@
-import { ProductDimension } from '../../daos/products/interfaces/products.interfaces'
-import { ObjectId } from '../../utils/types'
+import { ProductDimension } from "./product-dimension.interfaces"
 
-export interface ProductModelDto {
+export interface IProduct {
     id: number | ObjectId | string
     title: string
     category: string
@@ -13,4 +12,5 @@ export interface ProductModelDto {
     productDimensions: ProductDimension
     barcode: string
     kind: string
+    supportRush: boolean
 }

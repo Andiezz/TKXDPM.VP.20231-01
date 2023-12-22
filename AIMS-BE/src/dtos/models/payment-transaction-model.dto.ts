@@ -1,4 +1,3 @@
-import { ObjectId } from "../../utils/types";
 
 export interface PaymentTransactionModelDto {
     id: number | ObjectId | string

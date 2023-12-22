@@ -1,4 +1,3 @@
-import { ObjectId } from "../../utils/types";
 
 export interface Invoice {
     id:number | ObjectId | string

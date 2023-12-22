@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from 'mongoose'
 import { IOrder } from '../interfaces/order.interface'
-import { Document } from 'mongodb'
+import { Document, ObjectId } from 'mongodb'
 import { ORDER_STATUS } from '../../../../configs/enums'
 
 
@@ -32,10 +32,19 @@ export class OrderModel {
                         type: Number,
                         required: true,
                     },
+                    deliveryInfoId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'DeliveryInfo',
+                        required: true,
+                    },
                     status: {
                         type: Number,
                         default: ORDER_STATUS.PENDING,
                         enum: ORDER_STATUS,
+                    },
+                    shippingCost: {
+                        type: Number,
+                        required: true,
                     },
                 },
                 { timestamps: true }

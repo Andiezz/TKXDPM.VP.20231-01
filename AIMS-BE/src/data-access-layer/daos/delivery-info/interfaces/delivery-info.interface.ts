@@ -8,6 +8,5 @@ export interface IDeliveryInfo {
     district:string
     instructions: string
     time: Date
-    OrderId: ObjectId
     deliveryMethod:string
 }

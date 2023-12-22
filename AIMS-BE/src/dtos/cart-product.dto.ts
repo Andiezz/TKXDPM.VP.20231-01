@@ -1,3 +1,3 @@
-import { ICart } from "../data-access-layer/daos/cart/interfaces/cart.interface.dto"
+import { ICartProduct } from "../data-access-layer/daos/cart-product/interfaces/cart-product.interface";
 
-export type CreateCartProductDto = Omit<ICart, 'id'>
+export type CreateCartProductDto = Omit<ICartProduct, 'id'>
