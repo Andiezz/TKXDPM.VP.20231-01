@@ -20,6 +20,7 @@ import {
 import { DELIVERY_METHOD, ORDER_STATUS } from '../../../configs/enums'
 import { CreateDeliveryInfoDto } from '../../../dtos/delivery-info.dto'
 import { isValidObjectId } from 'mongoose'
+import { PROVINCE } from '../../../configs/constants'
 
 export class OrderRepository {
     private orderDao: OrderDao
@@ -48,7 +49,8 @@ export class OrderRepository {
         }
         // Check address support rush
         if (createDeliveryInfoDto.deliveryMethod == DELIVERY_METHOD.RUSH) {
-            if (createDeliveryInfoDto.province != 'Hà Nội') {
+            const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
+            if (createDeliveryInfoDto.province != HN?.name) {
                 return 'Address not available in your province'
             }
         }
@@ -98,12 +100,14 @@ export class OrderRepository {
         const deliveryInfoId: string = deliveryInfoIdObject.toString()
 
         //Caculate ShippingCost
+        const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
+        const HCM = PROVINCE.find((province) => province.code === 79) // 79 is the code for Hồ Chí Minh
         let shippingCost
         if (totalPrice * 1.1 > 100000) {
             shippingCost = 0
         } else if (
-            createDeliveryInfoDto.province == 'Hà Nội' ||
-            createDeliveryInfoDto.province == 'Hồ Chí Minh'
+            createDeliveryInfoDto.province == HN?.name ||
+            createDeliveryInfoDto.province == HCM?.name
         ) {
             if (widthMax <= 3) {
                 shippingCost = widthMax * 22000
