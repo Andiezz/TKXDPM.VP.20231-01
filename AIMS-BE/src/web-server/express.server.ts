@@ -2,10 +2,17 @@ import express, { Application } from 'express'
 import Controller from '../common/controller.interface'
 import { NotFoundError } from '../errors'
 import { ErrorMiddleware } from '../middlewares/error.middleware'
+import cors from 'cors'
 
 class ExpressServer {
     public readonly express: Application
     public readonly port: number
+    private readonly CORS_OPTIONS = {
+        origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
+    }
 
     constructor(controllers: Controller[]) {
         this.express = express()
@@ -19,6 +26,7 @@ class ExpressServer {
 
     private initializeMiddleware(): void {
         this.express.set('view engine', 'ejs')
+        this.express.use(cors(this.CORS_OPTIONS))
         this.express.use(express.static('public'))
         this.express.use(express.json())
         this.express.use(express.urlencoded({ extended: true }))
