@@ -5,10 +5,12 @@ import { UsersDao } from '../interfaces/users.dao'
 import { UserModel } from '../schemas/user.model'
 import { hashData } from '../../../../utils/security'
 import { USER_ROLE } from '../../../../configs/enums'
-import { isValidObjectId } from 'mongoose'
+import { Model, isValidObjectId } from 'mongoose'
 import { USER_STATUS } from '../../../../configs/constants'
 export class UsersMongooseDao implements UsersDao {
-    constructor(private userModel: Document = UserModel.getInstance()) {}
+    public constructor(
+        private readonly userModel: Model<IUser> = UserModel.getInstance()
+    ) {}
 
     public async seedAdmin(): Promise<void> {
         try {
@@ -85,37 +87,52 @@ export class UsersMongooseDao implements UsersDao {
     public async updateInfo(
         userId: string,
         updateUserInfoDto: UpdateUserInfoDto
-    ): Promise<IUser> {
+    ): Promise<boolean> {
         const userDoc = await this.userModel.findByIdAndUpdate(userId, {
             name: updateUserInfoDto.name,
             phone: updateUserInfoDto.phone,
         })
-        const { _id, ...result } = userDoc.toObject()
-        result.id = _id
 
-        return result
+        if (!userDoc) {
+            return false
+        }
+
+        return true
     }
 
-    public async delete(id: string): Promise<void> {
+    public async delete(id: string): Promise<boolean> {
         await this.userModel.deleteOne({ _id: id })
+        return true
     }
 
     public async changePassword(
         id: string,
         newHashedPassword: string
-    ): Promise<void> {
-        await this.userModel.findByIdAndUpdate(id, {
-            password: newHashedPassword,
-        })
+    ): Promise<boolean> {
+        const userDoc = await this.userModel.findById(id)
+
+        if (!userDoc) {
+            return false
+        }
+
+        userDoc.password = newHashedPassword
+        await userDoc.save()
+        return true
     }
 
-    public async changeStatus(id: string): Promise<void> {
+    public async changeStatus(id: string): Promise<boolean> {
         const userDoc = await this.userModel.findById(id)
+
+        if (!userDoc) {
+            return false
+        }
+
         const status =
             userDoc.status == USER_STATUS.BLOCKED
                 ? USER_STATUS.ACTIVE
                 : USER_STATUS.BLOCKED
         userDoc.status = status
         await userDoc.save()
+        return true
     }
 }

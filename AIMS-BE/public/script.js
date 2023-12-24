@@ -8,7 +8,8 @@ paypal
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        invoiceId: '000001',
+                        payer: 'Nhimcoii',
+                        orderId: '000001',
                         payment_method: 'paypal',
                         amount: '10000',
                         currency: 'vnd',
@@ -42,10 +43,11 @@ async function handleVNPayPayment() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                payer: 'Nhimcoii',
+                orderId: '000001',
                 payment_method: 'vnpay',
                 amount: '10000',
                 currency: 'vnd',
-                invoiceId: '000002',
             }),
         })
 

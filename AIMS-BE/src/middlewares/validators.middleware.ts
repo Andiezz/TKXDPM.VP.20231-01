@@ -37,8 +37,8 @@ export const changePassword = [
 ]
 
 export const payRequest = [
-    body('invoiceId').exists().withMessage('Invoice id is required'),
-    body('payment_method').exists().withMessage('Payment method is required'),
+    body('orderId').exists().withMessage('Order id is required'),
+    body('paymentMethod').exists().withMessage('Payment method is required'),
     body('amount')
         .exists()
         .withMessage('Amount is required')
@@ -47,34 +47,24 @@ export const payRequest = [
     body('currency')
         .exists()
         .withMessage('Currency is required')
-        .isIn([SUPPORTED_CURRENCY.VND])
+        .isIn([SUPPORTED_CURRENCY.VND, SUPPORTED_CURRENCY.USD])
         .withMessage('Unsupported currency'),
 ]
 
+// export const captureTxnRequest = [
+//     body('orderId').exists().withMessage('Order id is required'),
+//     body('paymentMethod').exists().withMessage('Payment method is required'),
+//     body('amount')
+//         .exists()
+//         .withMessage('Amount is required')
+//         .isNumeric()
+//         .withMessage('Amount must be a numeric value'),
+//     ,
+//     body('currency').exists().withMessage('Currency is required'),
+// .isIn([SUPPORTED_CURRENCY.VND, SUPPORTED_CURRENCY.USD])
+// .withMessage('Unsupported currency'),
+// ]
+
 export const refundRequest = [
-    body('payment_method').exists().withMessage('Payment method is required'),
-    body('payment_id').exists().withMessage('Payment id is required'),
-]
-
-export const saveTxnRequest = [
-    body('invoiceId').exists().withMessage('Invoice id is required'),
-    body('paymentMethod').exists().withMessage('Payment method is required'),
-    body('amount')
-        .exists()
-        .withMessage('Amount is required')
-        .isNumeric()
-        .withMessage('Amount must be a numeric value'),
-    ,
-    body('transactionNo')
-        .exists()
-        .withMessage('Transaction number is required'),
-    body('paymentDate').exists().withMessage('Payment date is required'),
-]
-
-export const captureTransaction = [
-    param('transactionId')
-        .exists()
-        .withMessage('Transaction id is required')
-        .isMongoId(),
-    body('status').exists().withMessage('Status is required'),
+    param('orderId').exists().withMessage('Order id is required'),
 ]

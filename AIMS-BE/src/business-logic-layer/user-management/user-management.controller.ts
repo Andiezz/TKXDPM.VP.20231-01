@@ -21,7 +21,7 @@ export class UserManagementController implements Controller {
     private usersDao: UsersDao
     private notificationService: NotificationService
 
-    constructor() {
+    public constructor() {
         this.notificationService = MailService.getInstance()
         this.usersDao = new UsersMongooseDao()
         this.ensureAdmin()

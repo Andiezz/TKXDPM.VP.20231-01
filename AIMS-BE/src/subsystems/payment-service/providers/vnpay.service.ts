@@ -1,30 +1,31 @@
 import moment from 'moment'
+import axios, { AxiosResponse, AxiosError } from 'axios'
 import { PayRequestDto } from '../dtos/pay.dto'
 import { PaymentService } from '../interfaces/payment.service'
+import { RefundRequestDto } from '../dtos/refund.dto'
 export class VNPayService implements PaymentService {
-    private tmnCode
-    private secretKey
-    private returnUrl
-    private vnpUrl
+    private readonly tmnCode: string
+    private readonly secretKey: string
+    private readonly returnUrl: string
+    private readonly vnpUrl: string
+    private readonly vnpApi: string
 
-    constructor() {
-        this.tmnCode = process.env.VNPAY_TMN_CODE
-        this.secretKey = process.env.VNPAY_HASH_SECRET
-        this.returnUrl = process.env.VNPAY_RETURN_URL
-        this.vnpUrl = process.env.VNPAY_URL
-    }
-    testPay(input: PayRequestDto): Promise<string> {
-        throw new Error('Method not implemented.')
+    public constructor() {
+        this.tmnCode = process.env.VNPAY_TMN_CODE!
+        this.secretKey = process.env.VNPAY_HASH_SECRET!
+        this.returnUrl = process.env.VNPAY_RETURN_URL!
+        this.vnpUrl = process.env.VNPAY_URL!
+        this.vnpApi = process.env.VNPAY_API!
     }
 
-    async pay(input: PayRequestDto): Promise<string> {
+    public async pay(input: PayRequestDto): Promise<string> {
         process.env.TZ = 'Asia/Ho_Chi_Minh'
 
         const date = new Date()
         const createDate = moment(date).format('YYYYMMDDHHmmss')
 
         const amount = input.amount
-        const invoiceId = input.invoiceId
+        const orderId = input.orderId
         const locale = 'vn'
         const currCode = 'VND'
         const ipAddress = input.ipAddress
@@ -35,8 +36,8 @@ export class VNPayService implements PaymentService {
         vnp_Params['vnp_TmnCode'] = this.tmnCode
         vnp_Params['vnp_Locale'] = locale
         vnp_Params['vnp_CurrCode'] = currCode
-        vnp_Params['vnp_TxnRef'] = invoiceId
-        vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + invoiceId
+        vnp_Params['vnp_TxnRef'] = orderId
+        vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + orderId
         vnp_Params['vnp_OrderType'] = 'other'
         vnp_Params['vnp_Amount'] = amount * 100
         vnp_Params['vnp_ReturnUrl'] = this.returnUrl
@@ -59,84 +60,86 @@ export class VNPayService implements PaymentService {
         return createPaymentUrl
     }
 
-    async captureTransaction(input: any): Promise<any> {
-        let vnp_Params: any = input
-        const secureHash = vnp_Params['vnp_SecureHash']
-
-        const orderId = vnp_Params['vnp_TxnRef']
-        const rspCode = vnp_Params['vnp_ResponseCode']
-
-        delete vnp_Params['vnp_SecureHash']
-        delete vnp_Params['vnp_SecureHashType']
-
-        vnp_Params = this.sortObject(vnp_Params)
-
-        const querystring = require('qs')
-        const signData = querystring.stringify(vnp_Params, { encode: false })
-        const crypto = require('crypto')
-        const hmac = crypto.createHmac('sha512', this.secretKey)
-        const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest('hex')
-
-        const checksum = secureHash === signed
-        return checksum
-        const paymentStatus = '0' // Giả sử '0' là trạng thái khởi tạo giao dịch, chưa có IPN. Trạng thái này được lưu khi yêu cầu thanh toán chuyển hướng sang Cổng thanh toán VNPAY tại đầu khởi tạo đơn hàng.
-        //const paymentStatus = '1'; // Giả sử '1' là trạng thái thành công bạn cập nhật sau IPN được gọi và trả kết quả về nó
-        //const paymentStatus = '2'; // Giả sử '2' là trạng thái thất bại bạn cập nhật sau IPN được gọi và trả kết quả về nó
-
-        const checkOrderId = true // Mã đơn hàng "giá trị của vnp_TxnRef" VNPAY phản hồi tồn tại trong CSDL của bạn
-        const checkAmount = true // Kiểm tra số tiền "giá trị của vnp_Amout/100" trùng khớp với số tiền của đơn hàng trong CSDL của bạn
-        if (secureHash === signed) {
-            //kiểm tra checksum
-            if (checkOrderId) {
-                if (checkAmount) {
-                    if (paymentStatus == '0') {
-                        //kiểm tra tình trạng giao dịch trước khi cập nhật tình trạng thanh toán
-                        if (rspCode == '00') {
-                            //thanh cong
-                            //paymentStatus = '1'
-                            // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
-                            return {
-                                RspCode: '00',
-                                Message: 'Success',
-                            }
-                        } else {
-                            //that bai
-                            //paymentStatus = '2'
-                            // Ở đây cập nhật trạng thái giao dịch thanh toán thất bại vào CSDL của bạn
-                            return {
-                                RspCode: '00',
-                                Message: 'Success',
-                            }
-                        }
-                    } else {
-                        return {
-                            RspCode: '02',
-                            Message:
-                                'This order has been updated to the payment status',
-                        }
-                    }
-                } else {
-                    return {
-                        RspCode: '04',
-                        Message: 'Amount invalid',
-                    }
-                }
-            } else {
-                return {
-                    RspCode: '01',
-                    Message: 'Order not found',
-                }
-            }
-        } else {
-            return { RspCode: '97', Message: 'Checksum failed' }
+    public async refund(input: RefundRequestDto): Promise<boolean> {
+        process.env.TZ = 'Asia/Ho_Chi_Minh'
+        let date = new Date()
+        let crypto = require('crypto')
+        let vnp_TmnCode = this.tmnCode
+        let secretKey = this.secretKey
+        let vnp_Api = this.vnpApi
+        let vnp_TxnRef = input.orderId
+        let vnp_TransactionDate = moment(input.transactionDate).format(
+            'YYYYMMDDHHmmss'
+        )
+        let vnp_Amount = input.amount * 100
+        let vnp_TransactionType = '02'
+        let vnp_CreateBy = 'aims-system'
+        let vnp_RequestId = moment(date).format('HHmmss')
+        let vnp_Version = '2.1.0'
+        let vnp_Command = 'refund'
+        let vnp_OrderInfo = 'Hoan tien GD ma:' + vnp_TxnRef
+        let vnp_IpAddr = input.ipAddress
+        let vnp_CreateDate = moment(date).format('YYYYMMDDHHmmss')
+        let vnp_TransactionNo = '0'
+        let data =
+            vnp_RequestId +
+            '|' +
+            vnp_Version +
+            '|' +
+            vnp_Command +
+            '|' +
+            vnp_TmnCode +
+            '|' +
+            vnp_TransactionType +
+            '|' +
+            vnp_TxnRef +
+            '|' +
+            vnp_Amount +
+            '|' +
+            vnp_TransactionNo +
+            '|' +
+            vnp_TransactionDate +
+            '|' +
+            vnp_CreateBy +
+            '|' +
+            vnp_CreateDate +
+            '|' +
+            vnp_IpAddr +
+            '|' +
+            vnp_OrderInfo
+        let hmac = crypto.createHmac('sha512', secretKey)
+        let vnp_SecureHash = hmac
+            .update(Buffer.from(data, 'utf-8'))
+            .digest('hex')
+        let dataObj = {
+            vnp_RequestId: vnp_RequestId,
+            vnp_Version: vnp_Version,
+            vnp_Command: vnp_Command,
+            vnp_TmnCode: vnp_TmnCode,
+            vnp_TransactionType: vnp_TransactionType,
+            vnp_TxnRef: vnp_TxnRef,
+            vnp_Amount: vnp_Amount,
+            vnp_TransactionNo: vnp_TransactionNo,
+            vnp_CreateBy: vnp_CreateBy,
+            vnp_OrderInfo: vnp_OrderInfo,
+            vnp_TransactionDate: vnp_TransactionDate,
+            vnp_CreateDate: vnp_CreateDate,
+            vnp_IpAddr: vnp_IpAddr,
+            vnp_SecureHash: vnp_SecureHash,
         }
-    }
 
-    getBalance(): void {
-        throw new Error('Method not implemented.')
-    }
-    refund(): Promise<any> {
-        throw new Error('Method not implemented.')
+        try {
+            const result: AxiosResponse = await axios.post(vnp_Api, dataObj)
+            console.log(result.data)
+            if (result.data.vnp_ResponseCode != VNPAY_REFUND_CODE.SUCCESS) {
+                return false
+            }
+        } catch (e: any) {
+            console.error(`Refund error: ${e.message}`)
+            return false
+        }
+
+        return true
     }
 
     private sortObject(obj: any): Object {
@@ -157,4 +160,15 @@ export class VNPayService implements PaymentService {
         }
         return sorted
     }
+}
+
+export const VNPAY_REFUND_CODE = {
+    SUCCESS: '00',
+    INVALID_TMN_CODE: '02',
+    INVALID_FORMAT: '03',
+    TXN_NOT_FOUND: '91',
+    REFUND_INPROGRESS: '94',
+    VNPAY_FAIL: '95',
+    INVALID_CHECKSUM: '97',
+    OTHERS_ERROR: '99',
 }

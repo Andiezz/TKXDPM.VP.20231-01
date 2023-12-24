@@ -11,8 +11,8 @@ export interface UsersDao {
     updateInfo(
         userId: string,
         updateUserInfoDto: UpdateUserInfoDto
-    ): Promise<IUser>
-    delete(id: string): Promise<void>
-    changePassword(id: string, newHashedPassword: string): Promise<void>
-    changeStatus(id: string): Promise<void>
+    ): Promise<boolean>
+    delete(id: string): Promise<boolean>
+    changePassword(id: string, newHashedPassword: string): Promise<boolean>
+    changeStatus(id: string): Promise<boolean>
 }

@@ -1,6 +1,16 @@
-import { PAYMENT_METHOD } from '../payment-gateway.factory'
+export class RefundRequestDto {
+    orderId: string
+    transactionDate?: Date
+    amount: number
+    ipAddress: string
+    captureId?: string
 
-export type RefundRequestDto = {
-    payment_method: PAYMENT_METHOD
-    payment_id: string
+    constructor(input: RefundRequestDto) {
+        this.orderId = input.orderId
+        this.amount = input.amount
+        this.transactionDate = input.transactionDate
+        this.amount = input.amount
+        this.ipAddress = input.ipAddress
+        this.captureId = input.captureId
+    }
 }

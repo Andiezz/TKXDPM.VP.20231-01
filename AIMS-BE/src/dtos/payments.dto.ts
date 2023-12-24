@@ -2,26 +2,26 @@ import { SUPPORTED_CURRENCY } from '../configs/enums'
 import { PAYMENT_METHOD } from '../subsystems/payment-service'
 
 export class CreateTransactionDto {
-    invoiceId: string
+    orderId: string
     paymentMethod: PAYMENT_METHOD
     amount: number
     currency: SUPPORTED_CURRENCY
-    paymentDate: number
     content?: string
+    captureId?: string
 
     constructor(input: {
-        invoiceId: string
+        orderId: string
         paymentMethod: PAYMENT_METHOD
         amount: number
         currency: SUPPORTED_CURRENCY
-        paymentDate: number
         content?: string
+        captureId?: string
     }) {
-        this.invoiceId = input.invoiceId
+        this.orderId = input.orderId
         this.paymentMethod = input.paymentMethod
         this.amount = input.amount
         this.currency = input.currency
-        this.paymentDate = input.paymentDate
         this.content = input.content
+        this.captureId = input.captureId
     }
 }
