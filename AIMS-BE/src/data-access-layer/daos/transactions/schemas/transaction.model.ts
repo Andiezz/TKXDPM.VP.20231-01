@@ -28,12 +28,14 @@ export class TransactionModel {
                 {
                     status: {
                         type: Number,
-                        default: TRANSACTION_STATUS.PENDING,
+                        default: TRANSACTION_STATUS.SUCCEED,
                     },
-                    invoiceId: {
+                    orderId: {
                         type: String,
                         required: true,
                     },
+                    captureId: String,
+
                     paymentMethod: {
                         type: String,
                         required: true,
@@ -44,10 +46,6 @@ export class TransactionModel {
                     },
                     currency: {
                         type: String,
-                        required: true,
-                    },
-                    paymentDate: {
-                        type: Number,
                         required: true,
                     },
                     content: String,

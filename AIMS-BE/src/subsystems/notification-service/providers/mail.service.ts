@@ -1,8 +1,6 @@
-import { ContentDto } from '../dtos/content.dto'
-import { RecipientDto } from '../dtos/recipient.dto'
-import { SenderDto } from '../dtos/sender.dto'
-import { NotificationService } from '../interfaces/notification.service'
 import nodemailer, { Transporter } from 'nodemailer'
+import { RecipientDto } from '../dtos/recipient.dto'
+import { NotificationService } from '../interfaces/notification.service'
 
 export class MailService implements NotificationService {
     private static instance: MailService
@@ -25,7 +23,9 @@ export class MailService implements NotificationService {
         return MailService.instance
     }
 
-    public pushUserInfoChangesNotification(recipientDto: RecipientDto): void {
+    public async pushUserInfoChangesNotification(
+        recipientDto: RecipientDto
+    ): Promise<void> {
         // Set email options
         const mailOptions = {
             from: process.env.NODE_MAILER_EMAIL, // Sender
@@ -48,7 +48,7 @@ export class MailService implements NotificationService {
         this.sendMail(mailOptions)
     }
 
-    public pushNewUserAccount(recipientDto: RecipientDto): void {
+    public async pushNewUserAccount(recipientDto: RecipientDto): Promise<void> {
         const mailOptions = {
             from: process.env.NODE_MAILER_EMAIL, // Sender
             to: recipientDto.recipient, // Recipient
@@ -74,7 +74,7 @@ export class MailService implements NotificationService {
         this.sendMail(mailOptions)
     }
 
-    private sendMail(mailOptions: Object): void {
+    private async sendMail(mailOptions: Object): Promise<void> {
         // Send the email
         this.transporter?.sendMail(mailOptions, (error, info) => {
             if (error) {
