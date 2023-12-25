@@ -50,6 +50,10 @@ export class ProductModel {
                         type: Boolean,
                         required: true,
                     },
+                    image: {
+                        type: String,
+                        required: true,
+                    },
                 },
                 { timestamps: true, discriminatorKey: 'kind' }
             )

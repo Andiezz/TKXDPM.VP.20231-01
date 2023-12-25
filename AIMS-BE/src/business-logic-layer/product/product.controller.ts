@@ -14,24 +14,34 @@ import { BadRequestError } from '../../errors'
 import { BaseResponse } from '../../common/base-response'
 import ProductDaoFactory from '../../data-access-layer/daos/products/product.dao.factory'
 import { ProductModel } from '../../data-access-layer/daos/products/schemas/product.model'
+import multer from 'multer'
+import { fileHandler } from '../../middlewares/file-handler.middleware'
+import { StorageManage } from '../../subsystems/storage-service/interfaces/storage-manage.interface'
+import { RemoteStorageManage } from '../../subsystems/storage-service/providers/remote-storage.provider'
 
 export class ProductController implements Controller {
     public readonly path = '/products'
     public readonly router = Router()
     public readonly productDaoFactory: ProductDaoFactory
     public readonly productDao: ProductsDao
+    public readonly storageManage: StorageManage
 
     constructor() {
         this.productDaoFactory = new ProductDaoFactory()
         this.productDao = new ProductsMongooseDao(ProductModel.getInstance())
+        this.storageManage = new RemoteStorageManage()
         this.initializeRoutes()
     }
 
     private initializeRoutes() {
+        const upload = multer()
+
         this.router.post(
             `${this.path}`,
             jwtAuthGuard as RequestHandler,
             rolesGuard([USER_ROLE.MANAGER, USER_ROLE.ADMIN]) as RequestHandler,
+            upload.single('image'),
+            fileHandler,
             tryCatch(this.createProduct)
         )
 
@@ -39,12 +49,14 @@ export class ProductController implements Controller {
             `${this.path}/:id`,
             // jwtAuthGuard as RequestHandler,
             rolesGuard([USER_ROLE.ADMIN]) as RequestHandler,
+            upload.single('image'),
+            fileHandler,
             tryCatch(this.updateProduct)
         )
 
         this.router.get(
             `${this.path}/:id`,
-            jwtAuthGuard as RequestHandler,
+            // jwtAuthGuard as RequestHandler,
             tryCatch(this.getProduct)
         )
 
@@ -77,6 +89,19 @@ export class ProductController implements Controller {
             throw new BadRequestError('Bar code has already existed')
         }
 
+        if (req.body?.file) {
+            const uploadedFile = await this.storageManage.upload(req.body.file)
+            createProductDto.image = uploadedFile.path
+        } else {
+            createProductDto.image = '<default image url>'
+        }
+
+        if (typeof createProductDto.productDimensions === 'string') {
+            createProductDto.productDimensions = JSON.parse(
+                createProductDto.productDimensions
+            )
+        }
+
         await productDao.create(createProductDto)
 
         return res.json(new BaseResponse().ok('Create product successfully'))
@@ -97,6 +122,19 @@ export class ProductController implements Controller {
         )
         if (isBarCodeExist) {
             throw new BadRequestError('Bar code has already existed')
+        }
+
+        if (req.body?.file) {
+            const uploadedFile = await this.storageManage.upload(req.body.file)
+            updateProductDto.image = uploadedFile.path
+        } else {
+            updateProductDto.image = '<default image url>'
+        }
+
+        if (typeof updateProductDto.productDimensions === 'string') {
+            updateProductDto.productDimensions = JSON.parse(
+                updateProductDto.productDimensions
+            )
         }
 
         await productDao.update(id, updateProductDto)
