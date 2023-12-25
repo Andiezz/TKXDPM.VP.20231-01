@@ -168,6 +168,59 @@
     - Pull Request(s): 
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
 </details>
+
+<details>
+  <summary>W4: 18/12/2023~24/12/2023 </summary>
+<br>
+<details>
+<summary>Vũ Thành An </summary>
+<br>
+
+-   Assigned tasks:
+
+    -   User management use case
+    -   Add CD Track repository
+    -   Add support rush product
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/14]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/20]()
+    -   Specific implementation details:
+        -   Finish user management use case
+        -   Finish adding CD Track repository
+        -   Add support rush field in product
+</details>
+<details>
+<summary>Nguyễn Ngọc Ánh </summary>
+<br>
+ 
+-   Assigned tasks: 
+
+    -  Add order respository, cart respository
+    -  Add delivery-info-management, order-management, cart-management
+
+-   Implementation details:
+    -   Pull Request(s):
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/15]()
+    -   Specific implementation details:
+        -  implements implementations of functions to implement APIs
+        -  Cart : Create/Update/Reset with business logic
+        -  Order : Create/Get with business logic
+        -  Delivery : Create/Get with business logic
+</details>
+<details>
+<summary>Đỗ Duy Anh </summary>
+<br>
+    
+-   Assigned tasks:
+    
+    - Intergrate paypal and vnpay payment
+    
+-   Implementation details:
+    - Pull Request(s): 
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
+</details>
 </details>
 
 ---
