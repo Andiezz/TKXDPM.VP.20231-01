@@ -168,7 +168,7 @@
     - Pull Request(s): 
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
 </details>
-
+</details>
 <details>
   <summary>W4: 18/12/2023~24/12/2023 </summary>
 <br>
@@ -197,17 +197,15 @@
  
 -   Assigned tasks: 
 
-    -  Add order respository, cart respository
-    -  Add delivery-info-management, order-management, cart-management
+    -  Fix order respository
 
 -   Implementation details:
     -   Pull Request(s):
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/15]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/27]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/19]()
+        - 
     -   Specific implementation details:
-        -  implements implementations of functions to implement APIs
-        -  Cart : Create/Update/Reset with business logic
-        -  Order : Create/Get with business logic
-        -  Delivery : Create/Get with business logic
+        -  Order : update status, fix error with business logic
 </details>
 <details>
 <summary>Đỗ Duy Anh </summary>
@@ -220,7 +218,6 @@
 -   Implementation details:
     - Pull Request(s): 
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
-</details>
 </details>
 
 ---
