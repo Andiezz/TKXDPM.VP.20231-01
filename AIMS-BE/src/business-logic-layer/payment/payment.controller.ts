@@ -20,7 +20,7 @@ import {
 import { CreateTransactionDto } from '../../dtos/payments.dto'
 import { BadRequestError, ForbiddenError } from '../../errors'
 import { jwtAuthGuard, rolesGuard } from '../../middlewares/auth.middleware'
-import { ORDER_STATUS, USER_ROLE } from '../../configs/enums'
+import { USER_ROLE } from '../../configs/enums'
 import { OrderDao, OrderMongooseDao } from '../../data-access-layer/daos/order'
 export class PaymentController implements Controller {
     public readonly path = '/payments'

@@ -15,13 +15,6 @@ export enum KIND {
     LONG_PLAY = 'long-play',
 }
 
-export enum ORDER_STATUS {
-    PENDING = 0,
-    PAID = 1,
-    CANCELED = 2,
-    REFUNDED = 3,
-}
-
 export enum SUPPORTED_CURRENCY {
     VND = 'vnd',
     USD = 'usd',

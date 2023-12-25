@@ -17,9 +17,16 @@ import {
     CreateOrderFromCart,
     CreateOrderProductDto,
 } from '../../../dtos/order-product.dto'
-import { DELIVERY_METHOD, ORDER_STATUS } from '../../../configs/enums'
+import { DELIVERY_METHOD } from '../../../configs/enums'
 import { CreateDeliveryInfoDto } from '../../../dtos/delivery-info.dto'
 import { isValidObjectId } from 'mongoose'
+import { ORDER_STATUS } from '../../../configs/constants'
+import {
+    MailService,
+    NotificationService,
+    RecipientDto,
+} from '../../../subsystems/notification-service'
+import { PROVINCE } from '../../../configs/constants'
 
 export class OrderRepository {
     private orderDao: OrderDao
@@ -28,12 +35,14 @@ export class OrderRepository {
     private cartProductDao: CartProductDao
     private productDao: ProductsDao
     private deliveryInfoDao: DeliveryInfoDao
+    private notificationService: NotificationService
 
     constructor() {
         this.orderDao = new OrderMongooseDao()
         this.orderProductDao = new OrderProductMongooseDao()
         this.productDao = new ProductsMongooseDao(ProductModel.getInstance())
         // this.cartDao = new CartMongooseDao()
+        this.notificationService = MailService.getInstance()
         this.cartProductDao = new CartProductMongooseDao()
         this.deliveryInfoDao = new DeliveryInfoMongooseDao()
     }
@@ -48,20 +57,26 @@ export class OrderRepository {
         }
         // Check address support rush
         if (createDeliveryInfoDto.deliveryMethod == DELIVERY_METHOD.RUSH) {
-            if (createDeliveryInfoDto.province != 'Hà Nội') {
+            const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
+            if (createDeliveryInfoDto.province != HN?.name) {
                 return 'Address not available in your province'
             }
         }
+        const productIds = listProductsCart.map((productCart) =>
+            productCart.productId.toString()
+        )
+        const listProductDetail = await this.productDao.findMany(productIds)
 
-        // Create Delivery Detail
-        await this.deliveryInfoDao.create(createDeliveryInfoDto)
-        // Get ID delivery
-        const deliveryInfoIdObject =
-            await this.deliveryInfoDao.getLatestDeliveryInfoId()
-        if (!deliveryInfoIdObject) {
-            throw new BadRequestError('DeliveryInfo error')
+        let checkProductRush = 0
+        for (const product of listProductDetail) {
+            if (product.supportRush) {
+                checkProductRush = 1
+                break
+            }
         }
-        const deliveryInfoId: string = deliveryInfoIdObject.toString()
+        if (checkProductRush == 0) {
+            return 'All product not available'
+        }
 
         //Caculate Price
         let totalPrice = 0
@@ -82,14 +97,25 @@ export class OrderRepository {
                 widthMax = productDetail.productDimensions.width
             }
         }
+        // Create Delivery Detail
+        await this.deliveryInfoDao.create(createDeliveryInfoDto)
+        // Get ID delivery
+        const deliveryInfoIdObject =
+            await this.deliveryInfoDao.getLatestDeliveryInfoId()
+        if (!deliveryInfoIdObject) {
+            throw new BadRequestError('DeliveryInfo error')
+        }
+        const deliveryInfoId: string = deliveryInfoIdObject.toString()
 
+        const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
+        const HCM = PROVINCE.find((province) => province.code === 79) // 79 is the code for Hồ Chí Minh
         //Caculate ShippingCost
         let shippingCost
         if (totalPrice * 1.1 > 100000) {
             shippingCost = 0
         } else if (
-            createDeliveryInfoDto.province == 'Hà Nội' ||
-            createDeliveryInfoDto.province == 'Hồ Chí Minh'
+            createDeliveryInfoDto.province == HN?.name ||
+            createDeliveryInfoDto.province == HCM?.name
         ) {
             if (widthMax <= 3) {
                 shippingCost = widthMax * 22000
@@ -113,6 +139,7 @@ export class OrderRepository {
             deliveryInfoId: deliveryInfoId,
             shippingCost: shippingCost,
             status: ORDER_STATUS.PENDING,
+            totalAmount: totalPrice * 1.1 + shippingCost,
         }
         // Create new order
         const order = await this.orderDao.create(createOrderDto)
@@ -131,19 +158,15 @@ export class OrderRepository {
             }
             await this.orderProductDao.create(createOrderProductDto)
         }
-
-        return 'Ok'
+        const recipient = new RecipientDto(createDeliveryInfoDto.email)
+        this.notificationService.sendMailDetailOrder(recipient, orderId)
+        return 'Create new Order info'
     }
 
-    public async getOrderInfo() {
-        const orderIdObject = await this.orderDao.getLatestOrderId()
-        if (!orderIdObject) {
-            throw new BadRequestError('Order ID not found')
-        }
-        const orderId: string = orderIdObject.toString()
-        const orderDoc = await this.orderDao.findById(orderId)
+    public async getOrderInfo(id: string) {
+        const orderDoc = await this.orderDao.findById(id)
         if (!orderDoc) {
-            throw new BadRequestError('cart not found')
+            throw new BadRequestError('Order not found')
         }
         const {
             totalPrice,
@@ -151,20 +174,36 @@ export class OrderRepository {
             status,
             shippingCost,
             deliveryInfoId,
+            totalAmount,
         } = orderDoc
-        const listProduct =
-            await this.orderProductDao.findProductsByOrderId(orderId)
+        const listProduct = await this.orderProductDao.findProductsByOrderId(id)
+        if (!listProduct) {
+            throw new BadRequestError('DeliveryInfo error')
+        }
+
+        // list productSupportRush and listProductNomal
+        let listProductRush = []
+        let listProductNomal = []
+        for (const product of listProduct) {
+            if (product.productId.supportRush == true) {
+                listProductRush.push(product)
+            } else {
+                listProductNomal.push(product)
+            }
+        }
         const deliveryInfo = await this.deliveryInfoDao.findById(
             deliveryInfoId.toString()
         )
         return {
-            orderId: orderId,
-            listProduct,
+            orderId: id,
+            listProductRush,
+            listProductNomal,
             deliveryInfo,
             totalPrice,
             totalPriceVAT,
             status,
             shippingCost,
+            totalAmount,
         }
     }
 }

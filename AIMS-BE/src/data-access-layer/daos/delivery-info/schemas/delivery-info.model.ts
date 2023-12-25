@@ -23,44 +23,48 @@ export class DeliveryInfoModel {
      */
     public static getInstance(): DeliveryInfoModel {
         if (!DeliveryInfoModel.instance) {
-            const deliveryInfoSchema = new Schema<IDeliveryInfo>({
-                name: {
-                    type: String,
-                    required: true,
+            const deliveryInfoSchema = new Schema<IDeliveryInfo>(
+                {
+                    name: {
+                        type: String,
+                        required: true,
+                    },
+                    email: {
+                        type: String,
+                        required: true,
+                    },
+                    phone: {
+                        type: String,
+                        required: true,
+                    },
+                    address: {
+                        type: String,
+                        required: true,
+                    },
+                    province: {
+                        type: String,
+                        required: true,
+                    },
+                    instructions: {
+                        type: String,
+                        required: true,
+                    },
+                    time: {
+                        type: Date,
+                        required: true,
+                    },
+                    deliveryMethod: {
+                        type: String,
+                        required: true,
+                    },
                 },
-                email: {
-                    type: String,
-                    required: true,
-                },
-                phone: {
-                    type: String,
-                    required: true,
-                },
-                address: {
-                    type: String,
-                    required: true,
-                },
-                province: {
-                    type: String,
-                    required: true,
-                },
-                instructions: {
-                    type: String,
-                    required: true,
-                },
-                time: {
-                    type: Date,
-                    required: true,
-                },
-                deliveryMethod: {
-                    type: String,
-                    required: true,
-                },
-            }
+                { timestamps: true }
             )
-            DeliveryInfoModel.instance = model('DeliveryInfo', deliveryInfoSchema)
+            DeliveryInfoModel.instance = model(
+                'DeliveryInfo',
+                deliveryInfoSchema
+            )
         }
         return DeliveryInfoModel.instance
-
     }
 }
