@@ -27,9 +27,10 @@ export const TRANSACTION_STATUS = {
 }
 export enum ORDER_STATUS {
     PENDING = 0,
-    PAID = 1,
-    CANCELED = 2,
-    REFUNDED = 3,
+    CONFIRM = 1,
+    PAID = 2,
+    CANCELED = 3,
+    REFUNDED = 4,
 }
 
 export const PROVINCE = [

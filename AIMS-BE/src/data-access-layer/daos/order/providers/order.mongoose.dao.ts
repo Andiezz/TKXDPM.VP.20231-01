@@ -64,9 +64,13 @@ export class OrderMongooseDao implements OrderDao {
         id: string,
         status: ORDER_STATUS
     ): Promise<IOrder> {
-        const orderDoc = await this.orderModel.findByIdAndUpdate(id, {
-            status: status,
-        })
+        const orderDoc = await this.orderModel.findByIdAndUpdate(
+            id,
+            {
+                status: status,
+            },
+            { new: true }
+        )
         const { _id, ...result } = orderDoc.toObject()
         result.id = _id
 

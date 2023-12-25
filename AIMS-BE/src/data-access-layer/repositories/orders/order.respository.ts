@@ -206,4 +206,89 @@ export class OrderRepository {
             totalAmount,
         }
     }
+    public async updateStatus(id: string, statusOrder: ORDER_STATUS) {
+        if (statusOrder == ORDER_STATUS.CONFIRM) {
+            const orderDoc = await this.orderDao.findById(id)
+            if (!orderDoc) {
+                throw new BadRequestError('Order not found')
+            }
+            const {
+                totalPrice,
+                totalPriceVAT,
+                status,
+                shippingCost,
+                deliveryInfoId,
+                totalAmount,
+            } = orderDoc
+            const listProduct =
+                await this.orderProductDao.findProductsByOrderId(id)
+            if (!listProduct) {
+                throw new BadRequestError('DeliveryInfo error')
+            }
+            for (const product of listProduct) {
+                const productDB = await this.productDao.findById(
+                    product.productId.id
+                )
+                if (!productDB) {
+                    throw new BadRequestError('product ID not found')
+                }
+                if (product.quantity > productDB.quantity) {
+                    return 'San pham trong kho khong du'
+                }
+            }
+            const Status = await this.orderDao.updateStatus(id, statusOrder)
+            if (!Status) {
+                throw new BadRequestError('Order not found')
+            }
+            return Status
+        } else {
+            const Status = await this.orderDao.updateStatus(id, statusOrder)
+            if (!Status) {
+                throw new BadRequestError('Order not found')
+            }
+            return Status
+        }
+    }
+    public async getAllOrderInfo() {
+        //     const orderDoc = await this.orderDao.findById(id)
+        //     if (!orderDoc) {
+        //         throw new BadRequestError('Order not found')
+        //     }
+        //     const {
+        //         totalPrice,
+        //         totalPriceVAT,
+        //         status,
+        //         shippingCost,
+        //         deliveryInfoId,
+        //         totalAmount,
+        //     } = orderDoc
+        //     const listProduct = await this.orderProductDao.findProductsByOrderId(id)
+        //     if (!listProduct) {
+        //         throw new BadRequestError('DeliveryInfo error')
+        //     }
+        //     // list productSupportRush and listProductNomal
+        //     let listProductRush = []
+        //     let listProductNomal = []
+        //     for (const product of listProduct) {
+        //         if (product.productId.supportRush == true) {
+        //             listProductRush.push(product)
+        //         } else {
+        //             listProductNomal.push(product)
+        //         }
+        //     }
+        //     const deliveryInfo = await this.deliveryInfoDao.findById(
+        //         deliveryInfoId.toString()
+        //     )
+        //     return {
+        //         orderId: id,
+        //         listProductRush,
+        //         listProductNomal,
+        //         deliveryInfo,
+        //         totalPrice,
+        //         totalPriceVAT,
+        //         status,
+        //         shippingCost,
+        //         totalAmount,
+        //     }
+    }
 }

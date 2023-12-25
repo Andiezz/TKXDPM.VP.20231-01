@@ -67,10 +67,10 @@ export class OrderManagementController implements Controller {
     ): Promise<Response | void> => {
         const { id } = req.params
         const { status } = req.body
-        const Status = await this.orderDao.updateStatus(id, status)
+        const Status = await this.orderRepository.updateStatus(id, status)
         if (!Status) {
             throw new BadRequestError('Order not found')
         }
-        return res.json(new BaseResponse().ok('Update Order Success', Status))
+        return res.json(new BaseResponse().ok('Info: Update Order', Status))
     }
 }
