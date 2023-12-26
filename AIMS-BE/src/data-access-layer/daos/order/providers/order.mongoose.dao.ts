@@ -29,17 +29,12 @@ export class OrderMongooseDao implements OrderDao {
         return result
     }
 
-    public async getLatestOrderId(filter?: Object): Promise<string | null> {
+    public async getLatestOrderId(filter?: Object): Promise<string> {
         const deliveryInfoDoc = await this.orderModel
             .findOne({ ...filter })
             .sort({ createdAt: -1 }) // Sắp xếp theo thời gian tạo mới nhất đến cũ nhất
-
-        if (deliveryInfoDoc) {
-            const { _id } = deliveryInfoDoc.toObject()
-            return _id.toString()
-        } else {
-            return null // Trả về null nếu không tìm thấy giỏ hàng
-        }
+        const { _id } = deliveryInfoDoc.toObject()
+        return _id.toString()
     }
     public async updateOrder(
         id: string,
