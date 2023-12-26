@@ -45,6 +45,9 @@ export class DeliveryInfoModel {
                         type: String,
                         required: true,
                     },
+                    district: {
+                        type: String,
+                    },
                     instructions: {
                         type: String,
                         required: true,

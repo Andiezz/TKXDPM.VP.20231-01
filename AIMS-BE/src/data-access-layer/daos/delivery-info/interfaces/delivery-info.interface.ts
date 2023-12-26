@@ -5,8 +5,8 @@ export interface IDeliveryInfo {
     phone: string
     address: string
     province: string
-    district:string
+    district: string
     instructions: string
     time: Date
-    deliveryMethod:string
+    deliveryMethod: string
 }
