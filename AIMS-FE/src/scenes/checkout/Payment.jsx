@@ -12,10 +12,10 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const Payment = ({ order }) => {
+const Payment = ({ invoice }) => {
   const paypal = useRef();
   const navigate = useNavigate();
-
+  console.log('INVOICE: ', invoice);
   useEffect(() => {
     if (!window.paypal || paypal.current.innerHTML.trim() !== '') {
       return;
@@ -135,42 +135,157 @@ const Payment = ({ order }) => {
         container
         spacing={2}
         sx={{ marginBottom: '25px', marginTop: '25px' }}
+        position={'static'}
       >
         <Grid xs={8} item={true}>
           <Typography variant="h2" sx={{ marginBottom: '40px' }}>
             Invoice
           </Typography>
           <Stack direction="column" spacing={2}>
-            <Stack direction="row" spacing={4}>
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
               <Typography variant="h7" bo>
                 Name:{' '}
               </Typography>
               <Typography variant="h7">
-                <strong>Duy Anh</strong>
+                <strong>{invoice?.deliveryInfoDetail?.name}</strong>
               </Typography>
             </Stack>
-            <Stack direction="row" spacing={4}>
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
               <Typography variant="h7">Email: </Typography>
               <Typography variant="h7">
-                <strong>Duy Anh</strong>
+                <strong>{invoice?.deliveryInfoDetail?.email}</strong>
               </Typography>
             </Stack>
-            <Stack direction="row" spacing={4}>
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
               <Typography variant="h7">Phone: </Typography>
               <Typography variant="h7">
-                <strong>Duy Anh</strong>
+                <strong>{invoice?.deliveryInfoDetail?.phone}</strong>
+              </Typography>
+            </Stack>
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h7">Address: </Typography>
+              <Typography variant="h7">
+                <strong>
+                  {[
+                    invoice?.deliveryInfoDetail?.address,
+                    invoice?.deliveryInfoDetail?.district,
+                    invoice?.deliveryInfoDetail?.province,
+                  ].join(', ')}
+                </strong>
+              </Typography>
+            </Stack>
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h7">Delivery method: </Typography>
+              <Typography variant="h7">
+                <strong>{invoice?.deliveryInfoDetail?.deliveryMethod}</strong>
+              </Typography>
+            </Stack>
+            {invoice?.deliveryInfoDetail?.time && (
+              <Stack
+                direction="row"
+                spacing={4}
+                justifyContent={'space-between'}
+                sx={{ width: '550px' }}
+              >
+                <Typography variant="h7">Expected arrival: </Typography>
+                <Typography variant="h7">
+                  <strong>
+                    {invoice?.deliveryInfoDetail?.time.toLocaleString()}
+                  </strong>
+                </Typography>
+              </Stack>
+            )}
+            <Stack
+              direction="row"
+              spacing={4}
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h7">Date: </Typography>
+              <Typography variant="h7">
+                <strong>
+                  {invoice?.deliveryInfoDetail?.createdAt.toLocaleString()}
+                </strong>
               </Typography>
             </Stack>
 
             <Divider sx={{ width: '550px' }} />
+            {invoice?.listProduct.map((item) => (
+              <Stack
+                direction="row"
+                justifyContent={'space-between'}
+                sx={{ width: '550px' }}
+              >
+                <Typography variant="h7">
+                  {item?.title} x {item?.quantity}{' '}
+                </Typography>
+                <Typography variant="h7">
+                  <strong>{Number(item.price).toLocaleString()} VND</strong>
+                </Typography>
+              </Stack>
+            ))}
+
             <Stack
               direction="row"
               justifyContent={'space-between'}
               sx={{ width: '550px' }}
             >
-              <Typography variant="h7">Harry Potter </Typography>
+              <Typography variant="h7">Shipping </Typography>
               <Typography variant="h7">
-                <strong>{Number(1000000).toLocaleString()} VND</strong>
+                <strong>
+                  {Number(invoice?.shippingCost).toLocaleString()} VND
+                </strong>
+              </Typography>
+            </Stack>
+
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h7">Subtotal </Typography>
+              <Typography variant="h7">
+                <strong>
+                  {Number(invoice?.totalPrice).toLocaleString()} VND
+                </strong>
+              </Typography>
+            </Stack>
+
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h7">VAT </Typography>
+              <Typography variant="h7">
+                <strong>
+                  {Number(invoice?.totalPriceVAT).toLocaleString()} VND
+                </strong>
               </Typography>
             </Stack>
             <Divider sx={{ width: '550px' }} />
@@ -184,7 +299,9 @@ const Payment = ({ order }) => {
                 <strong>Total</strong>
               </Typography>
               <Typography variant="h3" color={'secondary'}>
-                <strong>{Number(1000000).toLocaleString()} VND</strong>
+                <strong>
+                  {Number(invoice?.totalAmount).toLocaleString()} VND
+                </strong>
               </Typography>
             </Stack>
           </Stack>
@@ -196,6 +313,7 @@ const Payment = ({ order }) => {
           direction="column"
           justifyContent="center"
           alignItems="center"
+          position={'relative'}
         >
           <Typography variant="h2" sx={{ marginBottom: '40px' }}>
             Payment Method

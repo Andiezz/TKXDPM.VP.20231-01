@@ -50,7 +50,6 @@ export class DeliveryInfoModel {
                     },
                     instructions: {
                         type: String,
-                        required: true,
                     },
                     time: {
                         type: Date,

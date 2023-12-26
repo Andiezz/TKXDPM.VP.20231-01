@@ -25,7 +25,7 @@ const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart.cart);
-  const [order, setOrder] = useState({});
+  const [invoice, setInvoice] = useState();
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
   const isFinalStep = activeStep === 2;
@@ -38,8 +38,7 @@ const Checkout = () => {
     }
 
     if (isSecondStep) {
-      const response = await createOrder(values);
-      setOrder(values);
+      await createOrder(values);
     }
 
     if (isFinalStep) {
@@ -73,14 +72,19 @@ const Checkout = () => {
           : 'normal',
       },
     };
+    try {
+      const response = await fetch('http://localhost:8080/api/order/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
 
-    console.log(requestBody);
+      const responseData = await response.json();
 
-    const response = await fetch('http://localhost:8080/api/order/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    });
+      setInvoice(responseData.data);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (
@@ -132,7 +136,7 @@ const Checkout = () => {
                   setFieldValue={setFieldValue}
                 />
               )}
-              {isFinalStep && <Payment order={order} />}
+              {isFinalStep && invoice && <Payment invoice={invoice} />}
               {/* <Divider variant="middle" /> */}
               <Stack
                 direction="row"
