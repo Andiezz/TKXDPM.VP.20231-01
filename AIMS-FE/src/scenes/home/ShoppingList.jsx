@@ -22,82 +22,25 @@ const ShoppingList = () => {
     const items = await fetch('http://localhost:8080/api/products', {
       method: 'GET',
     });
-    // const items = {
-    //     data: [
-    //         {
-    //             id: 0,
-    //             category: 'topRated',
-    //             price: '100000',
-    //             name: 'Lionel Messi',
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //         {
-    //             id: 1,
-    //             category: 'topRated',
-    //             price: '100000',
-    //             name: 'Luis Suarez',
-    //             shortDescription: 'FC Barcelona',
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //         {
-    //             id: 2,
-    //             category: 'topRated',
-    //             price: '100000',
-    //             name: 'Neymar JR',
-    //             shortDescription: 'FC Barcelona',
 
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //         {
-    //             id: 3,
-    //             category: 'topRated',
-    //             price: '100000',
-    //             name: 'Sergio Busquet',
-    //             shortDescription: 'FC Barcelona',
-
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //         {
-    //             id: 4,
-    //             category: 'topRated',
-    //             price: '100000',
-    //             name: 'Andres Iniesta',
-    //             shortDescription: 'FC Barcelona',
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //         {
-    //             id: 5,
-    //             category: 'newArrivals',
-    //             price: '100000',
-    //             name: 'Joao Felix',
-    //             shortDescription: 'FC Barcelona',
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //         {
-    //             id: 6,
-    //             category: 'bestSellers',
-    //             price: '100000',
-    //             name: 'Joao Cancelo',
-    //             shortDescription: 'FC Barcelona',
-    //             image: 'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
-    //         },
-    //     ],
-    // }
     const itemsJson = await items.json();
-    console.log(itemsJson.data[0].paginatedResults);
     const itemlist = itemsJson.data[0].paginatedResults.map((item) => {
       return {
         id: item._id,
         category: item.category,
         price: item.price,
-        name: item.title,
+        title: item.title,
         kind: item.kind,
         longDescription: item.description,
-        image:
-          'https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/1-lionel-messi-rezeky-art.jpg',
+        image: item.image,
+        importDate: item.importDate,
+        quantity: item.quantity,
+        productDimensions: item.productDimensions,
+        barcode: item.barcode,
+        kind: item.kind,
+        supportRush: item.supportRush,
       };
     });
-    // const itemsJson = items
     dispatch(setItems(itemlist));
   }
 
@@ -105,9 +48,9 @@ const ShoppingList = () => {
     getItems();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const topRatedItems = items.filter((item) => item?.kind === 'cd');
-  const newArrivalsItems = items.filter((item) => item?.kind === 'dvd');
-  const bestSellersItems = items.filter((item) => item?.category === 'book');
+  const cds = items.filter((item) => item?.kind === 'cd');
+  const dvds = items.filter((item) => item?.kind === 'dvd');
+  const books = items.filter((item) => item?.kind === 'book');
 
   return (
     <Box width="80%" margin="80px auto">
@@ -131,9 +74,9 @@ const ShoppingList = () => {
         }}
       >
         <Tab label="ALL" value="all" />
-        <Tab label="NEW ARRIVALS" value="newArrivals" />
-        <Tab label="BEST SELLERS" value="bestSellers" />
-        <Tab label="TOP RATED" value="topRated" />
+        <Tab label="BOOK" value="book" />
+        <Tab label="DVD" value="dvd" />
+        <Tab label="CD" value="cd" />
       </Tabs>
       <Box
         margin="0 auto"
@@ -145,19 +88,19 @@ const ShoppingList = () => {
       >
         {value === 'all' &&
           items.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+            <Item item={item} key={`${item.title}-${item.id}`} />
           ))}
-        {value === 'newArrivals' &&
-          newArrivalsItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+        {value === 'book' &&
+          books.map((item) => (
+            <Item item={item} key={`${item.title}-${item.id}`} />
           ))}
-        {value === 'bestSellers' &&
-          bestSellersItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+        {value === 'dvd' &&
+          dvds.map((item) => (
+            <Item item={item} key={`${item.title}-${item.id}`} />
           ))}
-        {value === 'topRated' &&
-          topRatedItems.map((item) => (
-            <Item item={item} key={`${item.name}-${item.id}`} />
+        {value === 'cd' &&
+          cds.map((item) => (
+            <Item item={item} key={`${item.title}-${item.id}`} />
           ))}
       </Box>
     </Box>

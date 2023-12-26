@@ -1,4 +1,4 @@
-import { ProductDimension } from "./product-dimension.interfaces"
+import { ProductDimension } from './product-dimension.interfaces'
 
 export interface IProduct {
     id: number | ObjectId | string

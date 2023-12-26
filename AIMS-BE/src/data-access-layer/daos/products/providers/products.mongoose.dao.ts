@@ -87,7 +87,7 @@ export class ProductsMongooseDao implements ProductsDao {
                 $facet: {
                     paginatedResults: [
                         { $skip: skip },
-                        { $limit: limit as number },
+                        { $limit: Number(limit) },
                     ],
                     totalCount: [{ $count: 'count' }],
                 },

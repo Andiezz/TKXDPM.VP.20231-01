@@ -1,4 +1,11 @@
-import { Box, Button, Divider, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  Typography,
+  Grid,
+} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
@@ -61,11 +68,11 @@ const CartMenu = () => {
           {/* CART LIST */}
           <Box>
             {cart.map((item) => (
-              <Box key={`${item.name}-${item.id}`}>
+              <Box key={`${item?.title}-${item.id}`}>
                 <FlexBox p="15px 0">
                   <Box flex="1 1 40%">
                     <img
-                      alt={item?.name}
+                      alt={item?.title}
                       width="123px"
                       height="164px"
                       src={item?.image}
@@ -73,7 +80,7 @@ const CartMenu = () => {
                   </Box>
                   <Box flex="1 1 60%">
                     <FlexBox mb="5px">
-                      <Typography fontWeight="bold">{item?.name}</Typography>
+                      <Typography fontWeight="bold">{item?.title}</Typography>
                       <IconButton
                         onClick={() =>
                           dispatch(removeFromCart({ id: item.id }))
@@ -82,29 +89,37 @@ const CartMenu = () => {
                         <CloseIcon />
                       </IconButton>
                     </FlexBox>
-                    <Typography>{item?.shortDescription}</Typography>
+                    <Typography>{item?.longDescription}</Typography>
+                    <Typography>{item?.kind.toUpperCase()}</Typography>
                     <FlexBox m="15px 0">
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        border={`1.5px solid ${shades.neutral[500]}`}
-                      >
-                        <IconButton
-                          onClick={() =>
-                            dispatch(decreaseCount({ id: item.id }))
-                          }
-                        >
-                          <RemoveIcon />
-                        </IconButton>
-                        <Typography>{item.count}</Typography>
-                        <IconButton
-                          onClick={() =>
-                            dispatch(increaseCount({ id: item.id }))
-                          }
-                        >
-                          <AddIcon />
-                        </IconButton>
-                      </Box>
+                      <Grid container spacing={2} alignItems="center">
+                        <Grid item>
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            border={`1.5px solid ${shades.neutral[500]}`}
+                          >
+                            <IconButton
+                              onClick={() =>
+                                dispatch(decreaseCount({ id: item.id }))
+                              }
+                            >
+                              <RemoveIcon />
+                            </IconButton>
+                            <Typography>{item.count}</Typography>
+                            <IconButton
+                              onClick={() =>
+                                dispatch(increaseCount({ id: item.id }))
+                              }
+                            >
+                              <AddIcon />
+                            </IconButton>
+                          </Box>
+                        </Grid>
+                        <Grid item>
+                          <Typography>{'In stock: ' + item.quantity}</Typography>
+                        </Grid>
+                      </Grid>
                       <Typography fontWeight="bold">${item?.price}</Typography>
                     </FlexBox>
                   </Box>
