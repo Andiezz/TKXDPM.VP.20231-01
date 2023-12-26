@@ -109,7 +109,8 @@ export class OrderManagementController implements Controller {
                 throw new BadRequestError('All product not available')
             }
         }
-
+        //
+        let listProductDetails = []
         //Caculate Price
         let totalPrice = 0
         let widthMax = 0
@@ -121,6 +122,12 @@ export class OrderManagementController implements Controller {
             if (!productDetail) {
                 throw new BadRequestError('Product not found')
             }
+
+            listProductDetails.push({
+                productDetail: productDetail,
+                quantity: productCart.quantity,
+            })
+
             totalPrice += productDetail.price * productCart.quantity
             if (
                 productDetail.productDimensions &&
@@ -186,7 +193,7 @@ export class OrderManagementController implements Controller {
         )
         const data = {
             orderId: result,
-            listProduct: listProductDetail,
+            listProduct: listProductDetails,
             totalPrice: totalPrice,
             totalPriceVAT: totalPrice * 0.1,
             deliveryInfoDetail: deliveryInfoDetail,
