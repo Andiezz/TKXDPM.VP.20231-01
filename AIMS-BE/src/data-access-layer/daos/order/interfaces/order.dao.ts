@@ -6,7 +6,7 @@ export interface OrderDao {
     findById(id: string): Promise<IOrder | null>
     create(createOrderDto: CreateOrderDto): Promise<IOrder>
     getLatestOrderId(): Promise<String | null>
-    updateStatus(id: string, status: ORDER_STATUS): Promise<IOrder>
+    updateStatus(id: string, status: number): Promise<IOrder>
     updateOrder(
         id: string,
         updateOrderDto: CreateOrderDto

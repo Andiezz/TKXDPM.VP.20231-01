@@ -206,7 +206,7 @@ export class OrderRepository {
             totalAmount,
         }
     }
-    public async updateStatus(id: string, statusOrder: ORDER_STATUS) {
+    public async updateStatus(id: string, statusOrder: number) {
         if (statusOrder == ORDER_STATUS.CONFIRM) {
             const orderDoc = await this.orderDao.findById(id)
             if (!orderDoc) {
