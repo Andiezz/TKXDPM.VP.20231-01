@@ -13,4 +13,5 @@ export interface IProduct {
     barcode: string
     kind: string
     supportRush: boolean
+    image: string
 }
