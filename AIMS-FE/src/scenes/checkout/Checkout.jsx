@@ -16,7 +16,6 @@ import { shades } from '../../theme';
 import Contact from './Contact';
 import PaymentType from '../../components/PaymentType';
 import Shipping from './Shipping';
-import { loadStripe } from '@stripe/stripe-js';
 import { useNavigate } from 'react-router-dom';
 // const stripePromise = loadStripe(
 //   "pk_test_51LgU7yConHioZHhlAcZdfDAnV9643a7N1CMpxlKtzI1AUWLsRyrord79GYzZQ6m8RzVnVQaHsgbvN1qSpiDegoPi006QkO0Mlc"
@@ -25,25 +24,22 @@ import { useNavigate } from 'react-router-dom';
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
-  const [order, setOrder] = useState({});
   const cart = useSelector((state) => state.cart.cart);
+  const [order, setOrder] = useState({});
   const isFirstStep = activeStep === 0;
   const isSecondStep = activeStep === 1;
   const isFinalStep = activeStep === 2;
 
   const handleFormSubmit = async (values, actions) => {
     setActiveStep(activeStep + 1);
-    // this copies the billing address onto shipping address
-    if (isFirstStep && values.shippingAddress.isSameAddress) {
-      actions.setFieldValue('shippingAddress', {
-        ...values.billingAddress,
-        isSameAddress: true,
-      });
+
+    if (isFirstStep) {
+      // console.log(values);
     }
 
     if (isSecondStep) {
+      const response = await createOrder(values);
       setOrder(values);
-      // createOrder(values);
     }
 
     if (isFinalStep) {
@@ -54,25 +50,38 @@ const Checkout = () => {
   };
 
   async function createOrder(values) {
+    console.log('CART: ', cart);
+    console.log('ORDER: ', values);
     // API CREATE ORDER
-    const stripe = await stripePromise;
     const requestBody = {
-      userName: [values.firstName, values.lastName].join(' '),
-      email: values.email,
-      products: cart.map(({ id, count }) => ({
-        id,
-        count,
+      listProductId: cart.map(({ id, count }) => ({
+        productId: id,
+        quantity: count,
       })),
+      deliveryInfo: {
+        name: [
+          values?.deliveryInfo?.firstName,
+          values?.deliveryInfo?.lastName,
+        ].join(' '),
+        email: values.email,
+        phone: values.phoneNumber,
+        address: values?.deliveryInfo?.address,
+        province: values?.deliveryInfo?.province,
+        district: values?.deliveryInfo?.district,
+        instructions: values?.deliveryInfo?.instructions,
+        time: values?.deliveryInfo?.time,
+        deliveryMethod: values?.deliveryInfo?.isRushDelivery
+          ? 'rush'
+          : 'normal',
+      },
     };
 
-    const response = await fetch('http://localhost:2000/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-    });
-    // const session = await response.json();
-    // await stripe.redirectToCheckout({
-    //   sessionId: session.id,
+    console.log(requestBody);
+
+    // const response = await fetch('http://localhost:8080/api/order/create', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(requestBody),
     // });
   }
 
@@ -131,9 +140,9 @@ const Checkout = () => {
                 direction="row"
                 alignItems="center"
                 sx={{ marginTop: '25px' }}
-                justifyContent="space-between"
+                justifyContent="right "
               >
-                <Grid item={true}>
+                {/* <Grid item={true}>
                   {!isFirstStep && (
                     <Button
                       fullWidth
@@ -151,7 +160,7 @@ const Checkout = () => {
                       Back
                     </Button>
                   )}
-                </Grid>
+                </Grid> */}
                 <Grid item={true}>
                   <Button
                     fullWidth
@@ -182,26 +191,15 @@ const Checkout = () => {
 };
 
 const initialValues = {
-  billingAddress: {
+  deliveryInfo: {
     firstName: '',
     lastName: '',
-    country: '',
-    street1: '',
-    street2: '',
-    city: '',
-    state: '',
-    zipCode: '',
-  },
-  shippingAddress: {
-    isSameAddress: true,
-    firstName: '',
-    lastName: '',
-    country: '',
-    street1: '',
-    street2: '',
-    city: '',
-    state: '',
-    zipCode: '',
+    province: '',
+    district: '',
+    address: '',
+    instructions: '',
+    isRushDelivery: false,
+    time: '',
   },
   email: '',
   phoneNumber: '',
@@ -209,45 +207,16 @@ const initialValues = {
 
 const checkoutSchema = [
   yup.object().shape({
-    billingAddress: yup.object().shape({
+    deliveryInfo: yup.object().shape({
       firstName: yup.string().required('required'),
       lastName: yup.string().required('required'),
-      country: yup.string().required('required'),
-      street1: yup.string().required('required'),
-      street2: yup.string(),
-      city: yup.string().required('required'),
-      state: yup.string().required('required'),
-      zipCode: yup.string().required('required'),
-    }),
-    shippingAddress: yup.object().shape({
-      isSameAddress: yup.boolean(),
-      firstName: yup.string().when('isSameAddress', {
-        is: false,
-        then: yup.string().required('required'),
-      }),
-      lastName: yup.string().when('isSameAddress', {
-        is: false,
-        then: yup.string().required('required'),
-      }),
-      country: yup.string().when('isSameAddress', {
-        is: false,
-        then: yup.string().required('required'),
-      }),
-      street1: yup.string().when('isSameAddress', {
-        is: false,
-        then: yup.string().required('required'),
-      }),
-      street2: yup.string(),
-      city: yup.string().when('isSameAddress', {
-        is: false,
-        then: yup.string().required('required'),
-      }),
-      state: yup.string().when('isSameAddress', {
-        is: false,
-        then: yup.string().required('required'),
-      }),
-      zipCode: yup.string().when('isSameAddress', {
-        is: false,
+      province: yup.string().required('required'),
+      district: yup.string().required('required'),
+      address: yup.string().required('required'),
+      instructions: yup.string(),
+      isRushDelivery: yup.boolean(),
+      time: yup.string().when('isRushDelivery', {
+        is: true,
         then: yup.string().required('required'),
       }),
     }),

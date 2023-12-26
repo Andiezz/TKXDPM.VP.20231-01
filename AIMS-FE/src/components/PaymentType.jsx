@@ -13,10 +13,9 @@ import { useNavigate } from 'react-router-dom';
 const PaymentType = ({ order }) => {
   const paypal = useRef();
   const navigate = useNavigate();
-  console.log(order);
+
   useEffect(() => {
     if (!window.paypal || paypal.current.innerHTML.trim() !== '') {
-      //   console.error('PayPal SDK not loaded or button already rendered.');
       return;
     }
 
@@ -79,7 +78,7 @@ const PaymentType = ({ order }) => {
           navigate('/checkout/success');
         },
         onError: (err) => {
-          console.log(err);
+          console.error(err);
         },
       })
       .render(paypal.current);
@@ -139,6 +138,7 @@ const PaymentType = ({ order }) => {
           <Typography>Order Infos</Typography>
         </Grid>
         <Grid
+          item={true}
           xs={4}
           container
           direction="column"
