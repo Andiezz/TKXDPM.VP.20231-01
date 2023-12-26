@@ -178,18 +178,13 @@
 
 -   Assigned tasks:
 
-    -   User management use case
-    -   Add CD Track repository
-    -   Add support rush product
+    -   Add storage service subsystem
 
 -   Implementation details:
     -   Pull Request(s):
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/14]()
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/20]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/29]()
     -   Specific implementation details:
-        -   Finish user management use case
-        -   Finish adding CD Track repository
-        -   Add support rush field in product
+        -   Finish adding storage service subsystem for storing product image
 </details>
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
