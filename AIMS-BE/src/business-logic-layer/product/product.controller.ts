@@ -18,6 +18,7 @@ import multer from 'multer'
 import { fileHandler } from '../../middlewares/file-handler.middleware'
 import { StorageManage } from '../../subsystems/storage-service/interfaces/storage-manage.interface'
 import { RemoteStorageManage } from '../../subsystems/storage-service/providers/remote-storage.provider'
+import { DEFAULT_IMAGE_URL } from '../../configs/storage.config'
 
 export class ProductController implements Controller {
     public readonly path = '/products'
@@ -93,7 +94,7 @@ export class ProductController implements Controller {
             const uploadedFile = await this.storageManage.upload(req.body.file)
             createProductDto.image = uploadedFile.path
         } else {
-            createProductDto.image = '<default image url>'
+            createProductDto.image = DEFAULT_IMAGE_URL.replace("'", '')
         }
 
         if (typeof createProductDto.productDimensions === 'string') {

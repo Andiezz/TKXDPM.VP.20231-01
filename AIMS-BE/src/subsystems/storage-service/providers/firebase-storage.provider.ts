@@ -1,4 +1,4 @@
-import { firebaseConfig } from '../../../configs/storage.config'
+import { FIREBASE_CONFIG } from '../../../configs/storage.config'
 import { UploadedFile } from '../dtos/uploaded-file.dto'
 import { IFile } from '../interfaces/file.interface'
 import { StorageManager } from '../interfaces/storage-manager.interface'
@@ -16,7 +16,7 @@ export class FirebaseStorageManager implements StorageManager {
     private static storage: FirebaseStorage
 
     constructor() {
-        FirebaseStorageManager.app = initializeApp(firebaseConfig)
+        FirebaseStorageManager.app = initializeApp(FIREBASE_CONFIG)
         FirebaseStorageManager.storage = getStorage(FirebaseStorageManager.app)
     }
 
