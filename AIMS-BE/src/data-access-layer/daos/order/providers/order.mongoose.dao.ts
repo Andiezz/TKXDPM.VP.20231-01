@@ -60,10 +60,7 @@ export class OrderMongooseDao implements OrderDao {
 
         return result
     }
-    public async updateStatus(
-        id: string,
-        status: ORDER_STATUS
-    ): Promise<IOrder> {
+    public async updateStatus(id: string, status: number): Promise<IOrder> {
         const orderDoc = await this.orderModel.findByIdAndUpdate(
             id,
             {
