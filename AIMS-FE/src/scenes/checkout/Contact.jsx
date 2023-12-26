@@ -1,12 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import { Box, Typography } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
-const Payment = ({ values, touched, errors, handleBlur, handleChange }) => {
+const Contact = ({ values, touched, errors, handleBlur, handleChange }) => {
   return (
     <Box m="30px 0">
       {/* CONTACT INFO */}
       <Box>
-        <Typography sx={{ mb: "15px" }} fontSize="18px">
+        <Typography sx={{ mb: '15px' }} fontSize="18px">
           Contact Info
         </Typography>
         <TextField
@@ -19,7 +19,7 @@ const Payment = ({ values, touched, errors, handleBlur, handleChange }) => {
           name="email"
           error={!!touched.email && !!errors.email}
           helperText={touched.email && errors.email}
-          sx={{ gridColumn: "span 4", marginBottom: "15px" }}
+          sx={{ gridColumn: 'span 4', marginBottom: '15px' }}
         />
         <TextField
           fullWidth
@@ -31,11 +31,11 @@ const Payment = ({ values, touched, errors, handleBlur, handleChange }) => {
           name="phoneNumber"
           error={!!touched.phoneNumber && !!errors.phoneNumber}
           helperText={touched.phoneNumber && errors.phoneNumber}
-          sx={{ gridColumn: "span 4" }}
+          sx={{ gridColumn: 'span 4' }}
         />
       </Box>
     </Box>
   );
 };
 
-export default Payment;
+export default Contact;

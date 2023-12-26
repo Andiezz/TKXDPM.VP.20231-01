@@ -1,14 +1,15 @@
-import { Box, Typography, IconButton, useMediaQuery } from '@mui/material'
-import { Carousel } from 'react-responsive-carousel'
-import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore'
-import NavigateNextIcon from '@mui/icons-material/NavigateNext'
-import { shades } from '../../theme'
-import img1 from '../../assets/brooke-cagle-aVT8VkmzML4-unsplash.jpeg'
-import img2 from '../../assets/chris-ghinda-wK2ESlRRZQ8-unsplash.jpeg'
-import img3 from '../../assets/jc-gellidon-JM8TkWJ9UIY-unsplash.jpeg'
-import img4 from '../../assets/larm-rmah-R1Ku62Z7zqE-unsplash.jpeg'
-import img5 from '../../assets/toa-heftiba-dti56waifB4-unsplash.jpeg'
+import { Box, Typography, IconButton, useMediaQuery } from '@mui/material';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { shades } from '../../theme';
+import interstellar from '../../assets/interstellar.jpg';
+import img1 from '../../assets/brooke-cagle-aVT8VkmzML4-unsplash.jpeg';
+import img2 from '../../assets/chris-ghinda-wK2ESlRRZQ8-unsplash.jpeg';
+import img3 from '../../assets/jc-gellidon-JM8TkWJ9UIY-unsplash.jpeg';
+import img4 from '../../assets/larm-rmah-R1Ku62Z7zqE-unsplash.jpeg';
+import img5 from '../../assets/toa-heftiba-dti56waifB4-unsplash.jpeg';
 // imports all images from assets folder
 const importAll = (r) =>
     r.keys().reduce((acc, item) => {
@@ -20,7 +21,7 @@ const importAll = (r) =>
 //   require.context('../../assets', false, /\.(png|jpe?g|svg)$/)
 // );
 
-export const heroTextureImports = [img1, img2, img3, img4, img5]
+export const heroTextureImports = [interstellar, img1, img2, img3, img4, img5];
 
 const MainCarousel = () => {
     const isNonMobile = useMediaQuery('(min-width:600px)')
