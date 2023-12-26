@@ -2,7 +2,10 @@ import paypal from '@paypal/checkout-server-sdk'
 import { PayRequestDto } from '../dtos/pay.dto'
 import { PaymentService } from '../interfaces/payment.service'
 import { RefundRequestDto } from '../dtos/refund.dto'
+import { PaymentProvider } from '../decorators/payment-provider'
+import { PAYMENT_METHOD } from '../payment-gateway.factory'
 
+@PaymentProvider(PAYMENT_METHOD.PAYPAL)
 export class PaypalService implements PaymentService {
     private readonly paypalClient
     private readonly environment

@@ -1,25 +1,34 @@
 import { BadRequestError } from '../../errors'
 import { PaymentService } from './interfaces/payment.service'
-import { PaypalService } from './providers/paypal.service'
-import { VNPayService } from './providers/vnpay.service'
 
 export class PaymentGatewayFactory {
-    private paymentServices: Record<string, PaymentService>
+    private providers: Record<string, PaymentService> = {}
+    private static instance: PaymentGatewayFactory
 
-    constructor() {
-        this.paymentServices = {}
-        this.paymentServices[PAYMENT_METHOD.PAYPAL] = new PaypalService()
-        this.paymentServices[PAYMENT_METHOD.VNPAY] = new VNPayService()
-    }
+    private constructor() {}
 
-    public getInstance(payment_method: PAYMENT_METHOD) {
-        const instance = this.paymentServices[payment_method]
-
-        if (!instance) {
-            throw new BadRequestError('This payment method is not supported')
+    public static getInstance(): PaymentGatewayFactory {
+        if (!PaymentGatewayFactory.instance) {
+            PaymentGatewayFactory.instance = new PaymentGatewayFactory()
         }
 
-        return instance
+        return PaymentGatewayFactory.instance
+    }
+
+    public register(payment_method: string, provider: any): void {
+        this.providers[payment_method] = new provider()
+    }
+
+    public resolve(payment_method: string): any {
+        const matchedProvider = this.providers[payment_method]
+
+        if (!matchedProvider) {
+            throw new BadRequestError(
+                `This payment method is not supported: ${payment_method}`
+            )
+        }
+
+        return matchedProvider
     }
 }
 
