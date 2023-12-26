@@ -3,6 +3,10 @@ import axios, { AxiosResponse, AxiosError } from 'axios'
 import { PayRequestDto } from '../dtos/pay.dto'
 import { PaymentService } from '../interfaces/payment.service'
 import { RefundRequestDto } from '../dtos/refund.dto'
+import { PaymentProvider } from '../decorators/payment-provider'
+import { PAYMENT_METHOD } from '../payment-gateway.factory'
+
+@PaymentProvider(PAYMENT_METHOD.VNPAY)
 export class VNPayService implements PaymentService {
     private readonly tmnCode: string
     private readonly secretKey: string

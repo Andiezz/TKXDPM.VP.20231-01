@@ -1,36 +1,30 @@
-import {
-    Request,
-    RequestHandler,
-    RequestParamHandler,
-    Response,
-    Router,
-} from 'express'
+import { Request, RequestHandler, Response, Router } from 'express'
 import { BaseResponse } from '../../common/base-response'
 import Controller from '../../common/controller.interface'
-import { tryCatch } from '../../middlewares/error.middleware'
-import * as validators from '../../middlewares/validators.middleware'
-import { PaymentGatewayFactory } from '../../subsystems/payment-service'
-import { PayRequestDto } from '../../subsystems/payment-service/dtos/pay.dto'
-import { RefundRequestDto } from '../../subsystems/payment-service/dtos/refund.dto'
-import { ValidationChain } from 'express-validator'
+import { USER_ROLE } from '../../configs/enums'
+import { OrderDao, OrderMongooseDao } from '../../data-access-layer/daos/order'
 import {
     TransactionDao,
     TransactionMongooseDao,
 } from '../../data-access-layer/daos/transactions'
 import { CreateTransactionDto } from '../../dtos/payments.dto'
-import { BadRequestError, ForbiddenError } from '../../errors'
+import { BadRequestError } from '../../errors'
 import { jwtAuthGuard, rolesGuard } from '../../middlewares/auth.middleware'
-import { USER_ROLE } from '../../configs/enums'
-import { OrderDao, OrderMongooseDao } from '../../data-access-layer/daos/order'
+import { tryCatch } from '../../middlewares/error.middleware'
+import * as validators from '../../middlewares/validators.middleware'
+import { PaymentGatewayFactory } from '../../subsystems/payment-service'
+import { PayRequestDto } from '../../subsystems/payment-service/dtos/pay.dto'
+import { RefundRequestDto } from '../../subsystems/payment-service/dtos/refund.dto'
+
 export class PaymentController implements Controller {
     public readonly path = '/payments'
     public readonly router = Router()
-    private readonly paymentGatewayFactory: PaymentGatewayFactory
+    private readonly paymentGatewayFactory
     private readonly transactionsDao: TransactionDao
     private readonly orderDao: OrderDao
 
     public constructor() {
-        this.paymentGatewayFactory = new PaymentGatewayFactory()
+        this.paymentGatewayFactory = PaymentGatewayFactory.getInstance()
         this.transactionsDao = new TransactionMongooseDao()
         this.orderDao = new OrderMongooseDao()
         this.initializeRoutes()
@@ -78,7 +72,7 @@ export class PaymentController implements Controller {
 
         // TODO: Check amount
 
-        const paymantService = this.paymentGatewayFactory.getInstance(
+        const paymantService = this.paymentGatewayFactory.resolve(
             payReqDto.paymentMethod
         )
         const result = await paymantService.pay(payReqDto)
@@ -121,9 +115,10 @@ export class PaymentController implements Controller {
             throw new BadRequestError('Transaction not found')
         }
 
-        const paymantService = this.paymentGatewayFactory.getInstance(
+        const paymantService = this.paymentGatewayFactory.resolve(
             txnDoc.paymentMethod
         )
+
         const refundReqDto = new RefundRequestDto({
             ...txnDoc,
             ipAddress,
