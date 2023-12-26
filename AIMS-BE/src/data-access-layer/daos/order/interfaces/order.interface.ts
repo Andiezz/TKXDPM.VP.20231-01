@@ -1,8 +1,9 @@
 export interface IOrder {
     id: number | ObjectId | string
-    totalPrice: number 
-    totalPriceVAT: number 
+    totalPrice: number
+    totalPriceVAT: number
     status: number
-    deliveryInfoId:number| ObjectId| string
-    shippingCost:number
+    deliveryInfoId: number | ObjectId | string
+    shippingCost: number
+    totalAmount: number
 }

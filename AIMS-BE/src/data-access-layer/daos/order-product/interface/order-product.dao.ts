@@ -5,7 +5,10 @@ export interface OrderProductDao {
     findById(id: string): Promise<IOrderProduct | null>
     findAll(): Promise<IOrderProduct[] | null>
     create(createOrderProductDto: CreateOrderProductDto): Promise<boolean>
-    update(id: string, updateCartProductDto: IOrderProduct): Promise<boolean>
+    update(
+        id: string,
+        updateOrderProductDto: CreateOrderProductDto
+    ): Promise<IOrderProduct>
     delete(id: string): Promise<boolean>
-    findProductsByOrderId(id: string): Promise<Document[]| null>
+    findProductsByOrderId(id: string): Promise<Document[] | null>
 }

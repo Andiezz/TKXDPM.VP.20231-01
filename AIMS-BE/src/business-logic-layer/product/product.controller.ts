@@ -37,7 +37,7 @@ export class ProductController implements Controller {
 
         this.router.patch(
             `${this.path}/:id`,
-            jwtAuthGuard as RequestHandler,
+            // jwtAuthGuard as RequestHandler,
             rolesGuard([USER_ROLE.ADMIN]) as RequestHandler,
             tryCatch(this.updateProduct)
         )
@@ -50,7 +50,7 @@ export class ProductController implements Controller {
 
         this.router.get(
             `${this.path}`,
-            jwtAuthGuard as RequestHandler,
+            // jwtAuthGuard as RequestHandler,
             tryCatch(this.getProducts)
         )
 

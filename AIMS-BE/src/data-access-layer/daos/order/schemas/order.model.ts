@@ -1,9 +1,7 @@
 import mongoose, { Schema, model } from 'mongoose'
 import { IOrder } from '../interfaces/order.interface'
 import { Document, ObjectId } from 'mongodb'
-import { ORDER_STATUS } from '../../../../configs/enums'
-
-
+import { ORDER_STATUS } from '../../../../configs/constants'
 
 export class OrderModel {
     private static instance: Document
@@ -46,13 +44,15 @@ export class OrderModel {
                         type: Number,
                         required: true,
                     },
+                    totalAmount: {
+                        type: Number,
+                        required: true,
+                    },
                 },
                 { timestamps: true }
             )
             OrderModel.instance = model('Order', orderSchema)
-
         }
         return OrderModel.instance
     }
-
 }
