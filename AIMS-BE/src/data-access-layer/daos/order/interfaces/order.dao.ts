@@ -5,7 +5,7 @@ import { IOrder } from './order.interface'
 export interface OrderDao {
     findById(id: string): Promise<IOrder | null>
     create(createOrderDto: CreateOrderDto): Promise<IOrder>
-    getLatestOrderId(): Promise<String | null>
+    getLatestOrderId(): Promise<String>
     updateStatus(id: string, status: number): Promise<IOrder>
     updateOrder(
         id: string,

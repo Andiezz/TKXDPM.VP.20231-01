@@ -51,7 +51,6 @@ export class DeliveryInfoModel {
                     },
                     time: {
                         type: Date,
-                        required: true,
                     },
                     deliveryMethod: {
                         type: String,
