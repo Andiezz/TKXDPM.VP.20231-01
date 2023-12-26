@@ -212,14 +212,6 @@ export class OrderRepository {
             if (!orderDoc) {
                 throw new BadRequestError('Order not found')
             }
-            const {
-                totalPrice,
-                totalPriceVAT,
-                status,
-                shippingCost,
-                deliveryInfoId,
-                totalAmount,
-            } = orderDoc
             const listProduct =
                 await this.orderProductDao.findProductsByOrderId(id)
             if (!listProduct) {
@@ -250,45 +242,18 @@ export class OrderRepository {
         }
     }
     public async getAllOrderInfo() {
-        //     const orderDoc = await this.orderDao.findById(id)
-        //     if (!orderDoc) {
-        //         throw new BadRequestError('Order not found')
-        //     }
-        //     const {
-        //         totalPrice,
-        //         totalPriceVAT,
-        //         status,
-        //         shippingCost,
-        //         deliveryInfoId,
-        //         totalAmount,
-        //     } = orderDoc
-        //     const listProduct = await this.orderProductDao.findProductsByOrderId(id)
-        //     if (!listProduct) {
-        //         throw new BadRequestError('DeliveryInfo error')
-        //     }
-        //     // list productSupportRush and listProductNomal
-        //     let listProductRush = []
-        //     let listProductNomal = []
-        //     for (const product of listProduct) {
-        //         if (product.productId.supportRush == true) {
-        //             listProductRush.push(product)
-        //         } else {
-        //             listProductNomal.push(product)
-        //         }
-        //     }
-        //     const deliveryInfo = await this.deliveryInfoDao.findById(
-        //         deliveryInfoId.toString()
-        //     )
-        //     return {
-        //         orderId: id,
-        //         listProductRush,
-        //         listProductNomal,
-        //         deliveryInfo,
-        //         totalPrice,
-        //         totalPriceVAT,
-        //         status,
-        //         shippingCost,
-        //         totalAmount,
-        //     }
+        const listOrder = await this.orderDao.findAll()
+        if (!listOrder) {
+            throw new BadRequestError('Not order')
+        }
+        let listProduct
+        let listOrderDetail = []
+        for (const order of listOrder) {
+            listProduct = await this.orderProductDao.findProductsByOrderId(
+                order.id.toString()
+            )
+            listOrderDetail.push({ order, listProduct })
+        }
+        return listOrderDetail
     }
 }

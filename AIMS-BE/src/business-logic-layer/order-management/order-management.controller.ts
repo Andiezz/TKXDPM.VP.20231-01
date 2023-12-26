@@ -36,6 +36,7 @@ export class OrderManagementController implements Controller {
         this.router.post(`${this.path}/create`, tryCatch(this.createOrder))
         this.router.get(`${this.path}/:id`, tryCatch(this.getOrder))
         this.router.post(`${this.path}/update/:id`, tryCatch(this.updateStatus))
+        this.router.get(`${this.path}`, tryCatch(this.findAll))
     }
     private createOrder = async (
         req: Request,
@@ -72,5 +73,16 @@ export class OrderManagementController implements Controller {
             throw new BadRequestError('Order not found')
         }
         return res.json(new BaseResponse().ok('Info: Update Order', Status))
+    }
+
+    private findAll = async (
+        req: Request,
+        res: Response
+    ): Promise<Response | void> => {
+        const Status = await this.orderRepository.getAllOrderInfo()
+        if (!Status) {
+            throw new BadRequestError('Order not found')
+        }
+        return res.json(new BaseResponse().ok('Get Order Success', Status))
     }
 }

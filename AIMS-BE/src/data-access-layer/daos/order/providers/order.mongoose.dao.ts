@@ -76,4 +76,12 @@ export class OrderMongooseDao implements OrderDao {
 
         return result
     }
+    public async findAll(): Promise<IOrder[]> {
+        const orderDocs = await this.orderModel.find({})
+        return orderDocs.map((doc: Document) => {
+            const { _id, ...result } = doc.toObject()
+            result.id = _id
+            return result
+        })
+    }
 }

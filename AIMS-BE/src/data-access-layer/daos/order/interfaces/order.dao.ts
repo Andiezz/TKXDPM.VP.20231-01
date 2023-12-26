@@ -11,4 +11,5 @@ export interface OrderDao {
         id: string,
         updateOrderDto: CreateOrderDto
     ): Promise<IOrder | null>
+    findAll(): Promise<IOrder[]>
 }
