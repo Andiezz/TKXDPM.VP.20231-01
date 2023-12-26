@@ -7,10 +7,12 @@ import {
   StepLabel,
   Typography,
   Grid,
+  Stack,
+  Divider,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const PaymentType = ({ order }) => {
+const Payment = ({ order }) => {
   const paypal = useRef();
   const navigate = useNavigate();
 
@@ -135,7 +137,57 @@ const PaymentType = ({ order }) => {
         sx={{ marginBottom: '25px', marginTop: '25px' }}
       >
         <Grid xs={8} item={true}>
-          <Typography>Order Infos</Typography>
+          <Typography variant="h2" sx={{ marginBottom: '40px' }}>
+            Invoice
+          </Typography>
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row" spacing={4}>
+              <Typography variant="h7" bo>
+                Name:{' '}
+              </Typography>
+              <Typography variant="h7">
+                <strong>Duy Anh</strong>
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={4}>
+              <Typography variant="h7">Email: </Typography>
+              <Typography variant="h7">
+                <strong>Duy Anh</strong>
+              </Typography>
+            </Stack>
+            <Stack direction="row" spacing={4}>
+              <Typography variant="h7">Phone: </Typography>
+              <Typography variant="h7">
+                <strong>Duy Anh</strong>
+              </Typography>
+            </Stack>
+
+            <Divider sx={{ width: '550px' }} />
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h7">Harry Potter </Typography>
+              <Typography variant="h7">
+                <strong>{Number(1000000).toLocaleString()} VND</strong>
+              </Typography>
+            </Stack>
+            <Divider sx={{ width: '550px' }} />
+
+            <Stack
+              direction="row"
+              justifyContent={'space-between'}
+              sx={{ width: '550px' }}
+            >
+              <Typography variant="h3" color={'secondary'}>
+                <strong>Total</strong>
+              </Typography>
+              <Typography variant="h3" color={'secondary'}>
+                <strong>{Number(1000000).toLocaleString()} VND</strong>
+              </Typography>
+            </Stack>
+          </Stack>
         </Grid>
         <Grid
           item={true}
@@ -145,7 +197,9 @@ const PaymentType = ({ order }) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Typography sx={{ marginBottom: '10px' }}>Payment Method</Typography>
+          <Typography variant="h2" sx={{ marginBottom: '40px' }}>
+            Payment Method
+          </Typography>
 
           <Button
             fullWidth
@@ -170,4 +224,4 @@ const PaymentType = ({ order }) => {
   );
 };
 
-export default PaymentType;
+export default Payment;

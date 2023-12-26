@@ -14,7 +14,7 @@ import { useState } from 'react';
 import * as yup from 'yup';
 import { shades } from '../../theme';
 import Contact from './Contact';
-import PaymentType from '../../components/PaymentType';
+import Payment from './Payment';
 import Shipping from './Shipping';
 import { useNavigate } from 'react-router-dom';
 // const stripePromise = loadStripe(
@@ -50,8 +50,6 @@ const Checkout = () => {
   };
 
   async function createOrder(values) {
-    console.log('CART: ', cart);
-    console.log('ORDER: ', values);
     // API CREATE ORDER
     const requestBody = {
       listProductId: cart.map(({ id, count }) => ({
@@ -78,11 +76,11 @@ const Checkout = () => {
 
     console.log(requestBody);
 
-    // const response = await fetch('http://localhost:8080/api/order/create', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(requestBody),
-    // });
+    const response = await fetch('http://localhost:8080/api/order/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody),
+    });
   }
 
   return (
@@ -134,8 +132,8 @@ const Checkout = () => {
                   setFieldValue={setFieldValue}
                 />
               )}
-              {isFinalStep && <PaymentType order={order} />}
-              <Divider variant="middle" />
+              {isFinalStep && <Payment order={order} />}
+              {/* <Divider variant="middle" /> */}
               <Stack
                 direction="row"
                 alignItems="center"
