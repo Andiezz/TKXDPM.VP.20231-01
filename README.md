@@ -208,11 +208,15 @@
     
 -   Assigned tasks:
     
-    - Intergrate paypal and vnpay payment
+    - Codebase FE
+    - Complete intergrate paypal and vnpay feature
+    - Add reflection for payment provider
     
 -   Implementation details:
     - Pull Request(s): 
-        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/16]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/23]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/26]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/28]()
 </details>
 
 ---
