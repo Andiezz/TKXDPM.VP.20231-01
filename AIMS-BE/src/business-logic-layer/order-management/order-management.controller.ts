@@ -30,6 +30,10 @@ import { DeliveryInfoDao } from '../../data-access-layer/daos/delivery-info/inte
 import { DeliveryInfoMongooseDao } from '../../data-access-layer/daos/delivery-info/providers/delivery-info.mongoose.dao'
 import { OrderProductDao } from '../../data-access-layer/daos/order-product/interface/order-product.dao'
 import { OrderProductMongooseDao } from '../../data-access-layer/daos/order-product/providers/order-product.mongoose.dao'
+import {
+    TransactionDao,
+    TransactionMongooseDao,
+} from '../../data-access-layer/daos/transactions'
 
 export class OrderManagementController implements Controller {
     public readonly path = '/order'
@@ -40,6 +44,7 @@ export class OrderManagementController implements Controller {
     private productDao: ProductsDao
     private deliveryInfoDao: DeliveryInfoDao
     private orderProductDao: OrderProductDao
+    private transactionsDao: TransactionDao
 
     constructor() {
         this.notificationService = MailService.getInstance()
@@ -49,6 +54,7 @@ export class OrderManagementController implements Controller {
         this.deliveryInfoDao = new DeliveryInfoMongooseDao()
         this.orderProductDao = new OrderProductMongooseDao()
         this.productDao = new ProductsMongooseDao(ProductModel.getInstance())
+        this.transactionsDao = new TransactionMongooseDao()
         this.initializeRoutes()
     }
 
@@ -187,7 +193,7 @@ export class OrderManagementController implements Controller {
         )
 
         const recipient = new RecipientDto(deliveryInfo.email)
-        this.notificationService.sendMailDetailOrder(recipient, result)
+        this.notificationService.pushOrderDetailsNotification(recipient, result)
         const deliveryInfoDetail = await this.deliveryInfoDao.findById(
             deliveryInfoId.toString()
         )
@@ -231,27 +237,31 @@ export class OrderManagementController implements Controller {
 
         // list productSupportRush and listProductNomal
         let listProductRush = []
-        let listProductNomal = []
+        let listProductNormal = []
         for (const product of listProduct) {
             if (product.productId.supportRush == true) {
                 listProductRush.push(product)
             } else {
-                listProductNomal.push(product)
+                listProductNormal.push(product)
             }
         }
         const deliveryInfo = await this.deliveryInfoDao.findById(
             deliveryInfoId.toString()
         )
+
+        const txnDoc = await this.transactionsDao.findByOrderId(id)
+
         const data = {
             orderId: id,
             listProductRush,
-            listProductNomal,
+            listProductNormal,
             deliveryInfo,
             totalPrice,
             totalPriceVAT,
             status,
             shippingCost,
             totalAmount,
+            transaction: txnDoc,
         }
         return res.json(
             new BaseResponse().ok('Fetched Order info', {

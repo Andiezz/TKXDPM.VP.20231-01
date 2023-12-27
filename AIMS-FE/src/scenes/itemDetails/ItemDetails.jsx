@@ -44,12 +44,9 @@ const ItemDetails = () => {
   }
 
   async function getItems() {
-    const items = await fetch(
-      `http://localhost:8080/api/products?limit=4`,
-      {
-        method: 'GET',
-      }
-    );
+    const items = await fetch(`http://localhost:8080/api/products?limit=4`, {
+      method: 'GET',
+    });
     const itemsJson = await items.json();
     setItems(itemsJson.data[0]?.paginatedResults);
   }
@@ -73,7 +70,7 @@ const ItemDetails = () => {
             width="100%"
             height="100%"
             src={item?.image}
-            style={{ objectFit: 'contain' }}
+            style={{ objectFit: 'contain', borderRadius: '30px' }}
           />
         </Box>
 
@@ -104,8 +101,13 @@ const ItemDetails = () => {
               <Table sx={{ minWidth: 600 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Info</TableCell>
-                    <TableCell align="right">Value</TableCell>
+                    <TableCell>
+                      <strong>Info</strong>
+                    </TableCell>
+                    <TableCell align="right">
+                      {' '}
+                      <strong>Value</strong>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -174,7 +176,9 @@ const ItemDetails = () => {
                       <TableCell component="th" scope="row">
                         {capitalizeFirstLetter('releaseDate')}
                       </TableCell>
-                      <TableCell align="right">{new Date(item?.releaseDate).toLocaleString()}</TableCell>
+                      <TableCell align="right">
+                        {new Date(item?.releaseDate).toLocaleString()}
+                      </TableCell>
                     </TableRow>,
                     <TableRow
                       key={'genre'}
@@ -242,7 +246,9 @@ const ItemDetails = () => {
                       <TableCell component="th" scope="row">
                         {capitalizeFirstLetter('publicationDate')}
                       </TableCell>
-                      <TableCell align="right">{new Date(item?.publicationDate).toLocaleString()}</TableCell>
+                      <TableCell align="right">
+                        {new Date(item?.publicationDate).toLocaleString()}
+                      </TableCell>
                     </TableRow>,
                     <TableRow
                       key={'language'}
@@ -278,52 +284,55 @@ const ItemDetails = () => {
                       <TableCell align="right">{item?.bookCategory}</TableCell>
                     </TableRow>,
                   ]}
-                  {item?.kind === 'cd' || item?.kind === 'long-play' && [
-                    <TableRow
-                      key={'artist'}
-                      sx={{
-                        '&:last-child td, &:last-child th': { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {capitalizeFirstLetter('artist')}
-                      </TableCell>
-                      <TableCell align="right">{item?.artist}</TableCell>
-                    </TableRow>,
-                    <TableRow
-                      key={'recordLabel'}
-                      sx={{
-                        '&:last-child td, &:last-child th': { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {capitalizeFirstLetter('recordLabel')}
-                      </TableCell>
-                      <TableCell align="right">{item?.recordLabel}</TableCell>
-                    </TableRow>,
-                    <TableRow
-                      key={'genre'}
-                      sx={{
-                        '&:last-child td, &:last-child th': { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {capitalizeFirstLetter('genre')}
-                      </TableCell>
-                      <TableCell align="right">{item?.genre}</TableCell>
-                    </TableRow>,
-                    <TableRow
-                      key={'releaseDate'}
-                      sx={{
-                        '&:last-child td, &:last-child th': { border: 0 },
-                      }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {capitalizeFirstLetter('releaseDate')}
-                      </TableCell>
-                      <TableCell align="right">{new Date(item?.releaseDate)}</TableCell>
-                    </TableRow>,
-                  ]}
+                  {item?.kind === 'cd' ||
+                    (item?.kind === 'long-play' && [
+                      <TableRow
+                        key={'artist'}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {capitalizeFirstLetter('artist')}
+                        </TableCell>
+                        <TableCell align="right">{item?.artist}</TableCell>
+                      </TableRow>,
+                      <TableRow
+                        key={'recordLabel'}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {capitalizeFirstLetter('recordLabel')}
+                        </TableCell>
+                        <TableCell align="right">{item?.recordLabel}</TableCell>
+                      </TableRow>,
+                      <TableRow
+                        key={'genre'}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {capitalizeFirstLetter('genre')}
+                        </TableCell>
+                        <TableCell align="right">{item?.genre}</TableCell>
+                      </TableRow>,
+                      <TableRow
+                        key={'releaseDate'}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {capitalizeFirstLetter('releaseDate')}
+                        </TableCell>
+                        <TableCell align="right">
+                          {new Date(item?.releaseDate)}
+                        </TableCell>
+                      </TableRow>,
+                    ])}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -352,6 +361,9 @@ const ItemDetails = () => {
                 borderRadius: 0,
                 minWidth: '150px',
                 padding: '10px 40px',
+                '&:hover': {
+                  backgroundColor: '#de3349',
+                },
               }}
               onClick={() => dispatch(addToCart({ item: { ...item, count } }))}
             >

@@ -74,11 +74,14 @@ export class MailService implements NotificationService {
         this.sendMail(mailOptions)
     }
 
-    public sendMailDetailOrder(recipientDto: RecipientDto, id: String): void {
+    public pushOrderDetailsNotification(
+        recipientDto: RecipientDto,
+        id: String
+    ): void {
         const mailOptions = {
             from: process.env.NODE_MAILER_EMAIL, // Sender
             to: recipientDto.recipient, // Recipient
-            subject: ' Order Success In AIMS ', // Email subject
+            subject: 'Place Order Successfully', // Email subject
             html: `<!DOCTYPE html>
             <html lang="en">
             <head>
@@ -89,8 +92,35 @@ export class MailService implements NotificationService {
               <h1>AIMS</h1>
               <p>Thank you for shopping at AIMS. Your order has been confirmed and is being processed</p>
               <strong>- Order Number:</strong> ${id}<br>
-              <p>Order Details here /p> 
-              <a href="http://localhost:8080/api/order/${id}"> Click Here</a>
+              <strong>- Order Details: </strong> 
+              <a href="http://localhost:5173/order/${id}"> Click Here</a>
+              <p>We sincerely thank you and look forward to serving you in your next purchases!</p>
+            </body>
+            </html> `,
+        }
+        this.sendMail(mailOptions)
+    }
+
+    public pushOrderRefundedNotification(
+        recipientDto: RecipientDto,
+        id: String
+    ): void {
+        const mailOptions = {
+            from: process.env.NODE_MAILER_EMAIL, // Sender
+            to: recipientDto.recipient, // Recipient
+            subject: 'Refund Successfully', // Email subject
+            html: `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <title>AIMS</title>
+            </head>
+            <body>
+              <h1>AIMS</h1>
+              <p>Thank you for shopping at AIMS. Your order has been refunded</p>
+              <strong>- Order Number:</strong> ${id}<br>
+              <strong>- Order Details: </strong> 
+              <a href="http://localhost:5173/order/${id}"> Click Here</a>
               <p>We sincerely thank you and look forward to serving you in your next purchases!</p>
             </body>
             </html> `,

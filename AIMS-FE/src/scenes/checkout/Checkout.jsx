@@ -17,9 +17,7 @@ import Contact from './Contact';
 import Payment from './Payment';
 import Shipping from './Shipping';
 import { useNavigate } from 'react-router-dom';
-// const stripePromise = loadStripe(
-//   "pk_test_51LgU7yConHioZHhlAcZdfDAnV9643a7N1CMpxlKtzI1AUWLsRyrord79GYzZQ6m8RzVnVQaHsgbvN1qSpiDegoPi006QkO0Mlc"
-// );
+import { ORDER_STATUS } from '../../constants/status';
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -31,7 +29,9 @@ const Checkout = () => {
   const isFinalStep = activeStep === 2;
 
   const handleFormSubmit = async (values, actions) => {
-    setActiveStep(activeStep + 1);
+    if (!isFinalStep) {
+      setActiveStep(activeStep + 1);
+    }
 
     if (isFirstStep) {
       // console.log(values);
@@ -42,6 +42,7 @@ const Checkout = () => {
     }
 
     if (isFinalStep) {
+      await cancelOrder(invoice?.orderId);
       navigate('/');
     }
 
@@ -78,6 +79,25 @@ const Checkout = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       });
+
+      const responseData = await response.json();
+
+      setInvoice(responseData.data);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async function cancelOrder(orderId) {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/order/update/${orderId}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: ORDER_STATUS.CANCELED }),
+        }
+      );
 
       const responseData = await response.json();
 

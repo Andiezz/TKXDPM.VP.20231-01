@@ -8,13 +8,21 @@ import {
     TransactionMongooseDao,
 } from '../../data-access-layer/daos/transactions'
 import { CreateTransactionDto } from '../../dtos/payments.dto'
-import { BadRequestError } from '../../errors'
+import { BadRequestError, ForbiddenError } from '../../errors'
 import { jwtAuthGuard, rolesGuard } from '../../middlewares/auth.middleware'
 import { tryCatch } from '../../middlewares/error.middleware'
 import * as validators from '../../middlewares/validators.middleware'
 import { PaymentGatewayFactory } from '../../subsystems/payment-service'
 import { PayRequestDto } from '../../subsystems/payment-service/dtos/pay.dto'
 import { RefundRequestDto } from '../../subsystems/payment-service/dtos/refund.dto'
+import { ORDER_STATUS } from '../../configs/constants'
+import {
+    MailService,
+    NotificationService,
+    RecipientDto,
+} from '../../subsystems/notification-service'
+import { DeliveryInfoDao } from '../../data-access-layer/daos/delivery-info/interfaces/delivery-info.dao'
+import { DeliveryInfoMongooseDao } from '../../data-access-layer/daos/delivery-info/providers/delivery-info.mongoose.dao'
 
 export class PaymentController implements Controller {
     public readonly path = '/payments'
@@ -22,11 +30,16 @@ export class PaymentController implements Controller {
     private readonly paymentGatewayFactory
     private readonly transactionsDao: TransactionDao
     private readonly orderDao: OrderDao
+    private readonly notificationService: NotificationService
+    private readonly deliveryInfoDao: DeliveryInfoDao
 
     public constructor() {
         this.paymentGatewayFactory = PaymentGatewayFactory.getInstance()
         this.transactionsDao = new TransactionMongooseDao()
         this.orderDao = new OrderMongooseDao()
+        this.notificationService = MailService.getInstance()
+        this.deliveryInfoDao = new DeliveryInfoMongooseDao()
+
         this.initializeRoutes()
     }
 
@@ -47,8 +60,6 @@ export class PaymentController implements Controller {
 
         this.router.post(
             `${this.path}/refund/:orderId`,
-            jwtAuthGuard as RequestHandler,
-            rolesGuard([USER_ROLE.ADMIN, USER_ROLE.MANAGER]) as RequestHandler,
             validators.refundRequest,
             tryCatch(this.refund)
         )
@@ -61,16 +72,17 @@ export class PaymentController implements Controller {
         const ipAddress = req.ip || req.connection.remoteAddress
         const payReqDto = new PayRequestDto({ ...req.body, ipAddress })
 
-        //TODO: Check order status
-        // const orderDoc = await this.orderDao.findById(payReqDto.orderId)
-        // if (!orderDoc) {
-        //     throw new BadRequestError('Invalid order id')
-        // }
-        // if (orderDoc.status != ORDER_STATUS.PAID) {
-        //     throw new ForbiddenError('Can only refund paid order')
-        // }
+        const orderDoc = await this.orderDao.findById(payReqDto.orderId)
+        if (!orderDoc) {
+            throw new BadRequestError('Invalid order id')
+        }
 
-        // TODO: Check amount
+        if (
+            Number(orderDoc.totalAmount).toFixed() >
+            Number(payReqDto.amount).toFixed()
+        ) {
+            throw new BadRequestError('Insufficient amount')
+        }
 
         const paymantService = this.paymentGatewayFactory.resolve(
             payReqDto.paymentMethod
@@ -89,8 +101,17 @@ export class PaymentController implements Controller {
         res: Response
     ): Promise<Response | void> => {
         const createTxnReq = new CreateTransactionDto({ ...req.body })
+        const orderDoc = await this.orderDao.findById(createTxnReq.orderId)
+        if (!orderDoc) {
+            throw new BadRequestError('Invalid order id')
+        }
 
         await this.transactionsDao.create(createTxnReq)
+
+        await this.orderDao.updateStatus(
+            createTxnReq.orderId,
+            ORDER_STATUS.PAID
+        )
         return res.json(new BaseResponse().ok('Captured payment transaction'))
     }
 
@@ -101,14 +122,14 @@ export class PaymentController implements Controller {
         const { orderId } = req.params
 
         const ipAddress = req.ip || '::1'
-        //TODO: Check order status
-        // const orderDoc = await this.orderDao.findById(orderId)
-        // if (!orderDoc) {
-        //     throw new BadRequestError('Invalid order id')
-        // }
-        // if (orderDoc.status != ORDER_STATUS.PAID) {
-        //     throw new ForbiddenError('Can only refund paid order')
-        // }
+
+        const orderDoc = await this.orderDao.findById(orderId)
+        if (!orderDoc) {
+            throw new BadRequestError('Invalid order id')
+        }
+        if (orderDoc.status != ORDER_STATUS.PAID) {
+            throw new ForbiddenError('Can only refund paid order')
+        }
 
         const txnDoc = await this.transactionsDao.findByOrderId(orderId)
         if (!txnDoc) {
@@ -137,7 +158,22 @@ export class PaymentController implements Controller {
         })
         await this.transactionsDao.create(refundTxn)
 
-        // TODO: Update Order status
+        await this.orderDao.updateStatus(orderId, ORDER_STATUS.REFUNDED)
+
+        const deliveryInfo = await this.deliveryInfoDao.findById(
+            orderDoc.deliveryInfoId.toString()
+        )
+
+        if (!deliveryInfo) {
+            throw new BadRequestError('Delivery info not found')
+        }
+
+        const recipient = new RecipientDto(deliveryInfo.email)
+        this.notificationService.pushOrderRefundedNotification(
+            recipient,
+            orderId
+        )
+
         return res.json(new BaseResponse().ok('Fully refund payment'))
     }
 
