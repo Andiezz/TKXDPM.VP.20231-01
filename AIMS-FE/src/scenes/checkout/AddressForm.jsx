@@ -1,7 +1,15 @@
-import { getIn } from "formik";
-import { Box } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import { getIn } from 'formik';
+import { Box } from '@mui/material';
+import {
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { PROVINCE, DISTRICT } from '../../constants/locations';
+import { useState, useEffect } from 'react';
 
 const AddressForm = ({
   type,
@@ -11,8 +19,22 @@ const AddressForm = ({
   handleBlur,
   handleChange,
 }) => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+  const isNonMobile = useMediaQuery('(min-width:600px)');
+  const [districtList, setDistrictList] = useState([]);
+  useEffect(() => {
+    let provinceObj = {};
+    for (let i = 0; i < PROVINCE.length; i++) {
+      if (PROVINCE[i].name == values.deliveryInfo.province) {
+        provinceObj = PROVINCE[i];
+        break;
+      }
+    }
 
+    const filtered = DISTRICT.filter(
+      (v) => v?.province_code == provinceObj?.code
+    );
+    setDistrictList(filtered);
+  }, [values.deliveryInfo.province]);
   // these functions allow for better code readability
   const formattedName = (field) => `${type}.${field}`;
 
@@ -31,104 +53,100 @@ const AddressForm = ({
       gap="15px"
       gridTemplateColumns="repeat(4, minmax(0, 1fr))"
       sx={{
-        "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+        '& > div': { gridColumn: isNonMobile ? undefined : 'span 4' },
       }}
     >
       <TextField
         fullWidth
         type="text"
-        label="First Name"
+        label="First Name*"
         onBlur={handleBlur}
         onChange={handleChange}
         value={values.firstName}
-        name={formattedName("firstName")}
-        error={formattedError("firstName")}
-        helperText={formattedHelper("firstName")}
-        sx={{ gridColumn: "span 2" }}
+        name={formattedName('firstName')}
+        error={formattedError('firstName')}
+        helperText={formattedHelper('firstName')}
+        sx={{ gridColumn: 'span 2' }}
       />
       <TextField
         fullWidth
         type="text"
-        label="Last Name"
+        label="Last Name*"
         onBlur={handleBlur}
         onChange={handleChange}
         value={values.lastName}
-        name={formattedName("lastName")}
-        error={formattedError("lastName")}
-        helperText={formattedHelper("lastName")}
-        sx={{ gridColumn: "span 2" }}
+        name={formattedName('lastName')}
+        error={formattedError('lastName')}
+        helperText={formattedHelper('lastName')}
+        sx={{ gridColumn: 'span 2' }}
+      />
+      <FormControl sx={{ gridColumn: 'span 2' }}>
+        <InputLabel id="province-label">Province*</InputLabel>
+        <Select
+          labelId="province-label"
+          id="province-select"
+          value={values.province}
+          onChange={handleChange}
+          name={formattedName('province')}
+          error={formattedError('province')}
+          defaultValue={''}
+        >
+          {PROVINCE.map((v) => {
+            return (
+              <MenuItem value={v.name} key={v.name}>
+                {v.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+      <FormControl sx={{ gridColumn: 'span 2' }}>
+        <InputLabel id="district-label">District*</InputLabel>
+        <Select
+          labelId="district-label"
+          id="district-select"
+          value={values.district}
+          onChange={handleChange}
+          name={formattedName('district')}
+          error={formattedError('district')}
+          defaultValue={''}
+        >
+          {districtList.map((v) => {
+            return (
+              <MenuItem value={v.name} key={v.name}>
+                {v.name}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </FormControl>
+      <TextField
+        fullWidth
+        type="text"
+        label="Address"
+        onBlur={handleBlur}
+        onChange={handleChange}
+        value={values.address}
+        name={formattedName('address')}
+        error={formattedError('address')}
+        helperText={formattedHelper('address')}
+        multiline
+        rows={2}
+        sx={{ gridColumn: 'span 4' }}
       />
       <TextField
         fullWidth
         type="text"
-        label="Country"
+        label="Instructions (Optional)"
         onBlur={handleBlur}
         onChange={handleChange}
-        value={values.country}
-        name={formattedName("country")}
-        error={formattedError("country")}
-        helperText={formattedHelper("country")}
-        sx={{ gridColumn: "span 4" }}
-      />
-      <TextField
-        fullWidth
-        type="text"
-        label="Street Address"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.street1}
-        name={formattedName("street1")}
-        error={formattedError("street1")}
-        helperText={formattedHelper("street1")}
-        sx={{ gridColumn: "span 2" }}
-      />
-      <TextField
-        fullWidth
-        type="text"
-        label="Street Address 2 (optional)"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.street2}
-        name={formattedName("street2")}
-        error={formattedError("street2")}
-        helperText={formattedHelper("street2")}
-        sx={{ gridColumn: "span 2" }}
-      />
-      <TextField
-        fullWidth
-        type="text"
-        label="City"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.city}
-        name={formattedName("city")}
-        error={formattedError("city")}
-        helperText={formattedHelper("city")}
-        sx={{ gridColumn: "span 2" }}
-      />
-      <TextField
-        fullWidth
-        type="text"
-        label="State"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.state}
-        name={formattedName("state")}
-        error={formattedError("state")}
-        helperText={formattedHelper("state")}
-        sx={{ gridColumn: "1fr" }}
-      />
-      <TextField
-        fullWidth
-        type="text"
-        label="Zip Code"
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={values.zipCode}
-        name={formattedName("zipCode")}
-        error={formattedError("zipCode")}
-        helperText={formattedHelper("zipCode")}
-        sx={{ gridColumn: "1fr" }}
+        value={values.instructions}
+        name={formattedName('instructions')}
+        error={formattedError('instructions')}
+        helperText={formattedHelper('instructions')}
+        multiline
+        rows={4}
+        sx={{ gridColumn: 'span 4' }}
       />
     </Box>
   );

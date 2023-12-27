@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Home from './scenes/home/Home';
 import Navbar from './scenes/global/Navbar';
@@ -7,6 +9,7 @@ import ItemDetails from './scenes/itemDetails/ItemDetails';
 import CartMenu from './scenes/global/CartMenu';
 import Checkout from './scenes/checkout/Checkout';
 import Confirmation from './scenes/checkout/Confirmation';
+import OrderDetails from './scenes/home/OrderDetails';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -21,18 +24,21 @@ const ScrollToTop = () => {
 function App() {
   return (
     <div className="app">
-      <BrowserRouter>
-        <Navbar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="item/:itemId" element={<ItemDetails />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="checkout/success" element={<Confirmation />} />
-        </Routes>
-        <CartMenu />
-        <Footer />
-      </BrowserRouter>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <BrowserRouter>
+          <Navbar />
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="item/:itemId" element={<ItemDetails />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="checkout/success" element={<Confirmation />} />
+            <Route path="order/:orderId" element={<OrderDetails />} />
+          </Routes>
+          <CartMenu />
+          <Footer />
+        </BrowserRouter>
+      </LocalizationProvider>
     </div>
   );
 }

@@ -27,10 +27,16 @@ function Footer() {
             AIMS
           </Typography>
           <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat
+            The path to knowledge, art, and entertainment has, is, and will
+            always be a part of every person's life. However, life is inherently
+            not easy. There will be times when the products of creative labor
+            cannot reach everyone, simply because the spiritual offspring cannot
+            provide for them - the artists, intellectuals - a minimum standard
+            of living. Fortunately, difficulties do not make us falter. The era
+            of the Internet explosion, along with the Fourth Industrial
+            Revolution, has brought new opportunities for all of us: AIMS
+            Project, an e-commerce software specializing in the buying and
+            selling of media products.
           </div>
         </Box>
 
@@ -59,12 +65,12 @@ function Footer() {
             Contact Us
           </Typography>
           <Typography mb="30px">
-            50 north Whatever Blvd, Washington, DC 10501
+            01 Tran Dai Nghia Street, Hai Ba Trung, Hanoi, Vietnam
           </Typography>
           <Typography mb="30px" sx={{ wordWrap: 'break-word' }}>
-            Email: mredwardroh@gmail.com
+            Email: duyanhcva110t@gmail.com
           </Typography>
-          <Typography mb="30px">(222)333-4444</Typography>
+          <Typography mb="30px">+84 944 162 921</Typography>
         </Box>
       </Box>
     </Box>

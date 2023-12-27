@@ -1,5 +1,5 @@
 export class RefundRequestDto {
-    orderId: string
+    orderId: string | ObjectId
     transactionDate?: Date
     amount: number
     ipAddress: string

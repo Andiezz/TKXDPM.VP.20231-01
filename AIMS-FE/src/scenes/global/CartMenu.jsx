@@ -59,7 +59,7 @@ const CartMenu = () => {
         <Box padding="30px" overflow="auto" height="100%">
           {/* HEADER */}
           <FlexBox mb="15px">
-            <Typography variant="h3">SHOPPING BAG ({cart.length})</Typography>
+            <Typography variant="h3">MY CART ({cart.length})</Typography>
             <IconButton onClick={() => dispatch(setIsCartOpen({}))}>
               <CloseIcon />
             </IconButton>
@@ -76,6 +76,7 @@ const CartMenu = () => {
                       width="123px"
                       height="164px"
                       src={item?.image}
+                      style={{ borderRadius: '10px' }}
                     />
                   </Box>
                   <Box flex="1 1 60%">
@@ -117,10 +118,14 @@ const CartMenu = () => {
                           </Box>
                         </Grid>
                         <Grid item>
-                          <Typography>{'In stock: ' + item.quantity}</Typography>
+                          <Typography>
+                            {'In stock: ' + item.quantity}
+                          </Typography>
                         </Grid>
                       </Grid>
-                      <Typography fontWeight="bold">${item?.price}</Typography>
+                      <Typography fontWeight="bold">
+                        {item?.price.toLocaleString()} VND
+                      </Typography>
                     </FlexBox>
                   </Box>
                 </FlexBox>
@@ -129,29 +134,42 @@ const CartMenu = () => {
             ))}
           </Box>
 
-          {/* ACTIONS */}
-          <Box m="20px 0">
-            <FlexBox m="20px 0">
-              <Typography fontWeight="bold">SUBTOTAL</Typography>
-              <Typography fontWeight="bold">${totalPrice}</Typography>
-            </FlexBox>
-            <Button
-              sx={{
-                backgroundColor: shades.primary[400],
-                color: 'white',
-                borderRadius: 0,
-                minWidth: '100%',
-                padding: '20px 40px',
-                m: '20px 0',
-              }}
-              onClick={() => {
-                navigate('/checkout');
-                dispatch(setIsCartOpen({}));
-              }}
-            >
-              CHECKOUT
-            </Button>
-          </Box>
+          {cart.length > 0 ? (
+            <Box m="20px 0">
+              <FlexBox m="20px 0">
+                <Typography fontWeight="bold" color={'secondary'} variant="h3">
+                  SUBTOTAL
+                </Typography>
+                <Typography fontWeight="bold" color={'secondary'} variant="h3">
+                  {totalPrice.toLocaleString()} VND
+                </Typography>
+              </FlexBox>
+
+              <Button
+                sx={{
+                  backgroundColor: shades.primary[400],
+                  color: 'white',
+                  borderRadius: 0,
+                  minWidth: '100%',
+                  padding: '20px 40px',
+                  m: '20px 0',
+                  '&:hover': {
+                    backgroundColor: '#de3349',
+                  },
+                }}
+                onClick={() => {
+                  navigate('/checkout');
+                  dispatch(setIsCartOpen({}));
+                }}
+              >
+                CHECKOUT
+              </Button>
+            </Box>
+          ) : (
+            <Typography fontWeight="bold" color={'secondary'} variant="h3">
+              Your cart is empty
+            </Typography>
+          )}
         </Box>
       </Box>
     </Box>

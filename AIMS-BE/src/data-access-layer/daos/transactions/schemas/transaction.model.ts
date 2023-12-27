@@ -1,4 +1,4 @@
-import { Model, Schema, model } from 'mongoose'
+import mongoose, { Model, Schema, model } from 'mongoose'
 import { ITransaction } from '../interfaces/transaction.interface'
 import { PAYMENT_METHOD } from '../../../../subsystems/payment-service'
 import { TRANSACTION_STATUS } from '../../../../configs/constants'
@@ -31,8 +31,8 @@ export class TransactionModel {
                         default: TRANSACTION_STATUS.SUCCEED,
                     },
                     orderId: {
-                        type: String,
-                        required: true,
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: 'order',
                     },
                     captureId: String,
 

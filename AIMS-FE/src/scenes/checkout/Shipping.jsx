@@ -1,5 +1,16 @@
-import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material";
-import AddressForm from "./AddressForm";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  TextField,
+  Select,
+} from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import AddressForm from './AddressForm';
 
 const Shipping = ({
   values,
@@ -9,16 +20,18 @@ const Shipping = ({
   handleBlur,
   setFieldValue,
 }) => {
+  const formattedName = (field) => `${'deliveryInfo'}.${field}`;
+
   return (
     <Box m="30px auto">
       {/* BILLING FORM */}
       <Box>
-        <Typography sx={{ mb: "15px" }} fontSize="18px">
+        <Typography sx={{ mb: '15px' }} fontSize="18px">
           Billing Information
         </Typography>
         <AddressForm
-          type="billingAddress"
-          values={values.billingAddress}
+          type="deliveryInfo"
+          values={values}
           touched={touched}
           errors={errors}
           handleBlur={handleBlur}
@@ -30,35 +43,32 @@ const Shipping = ({
         <FormControlLabel
           control={
             <Checkbox
-              defaultChecked
-              value={values.shippingAddress.isSameAddress}
+              value={values.deliveryInfo.isRushDelivery}
               onChange={() =>
                 setFieldValue(
-                  "shippingAddress.isSameAddress",
-                  !values.shippingAddress.isSameAddress
+                  'deliveryInfo.isRushDelivery',
+                  !values.deliveryInfo.isRushDelivery
                 )
               }
             />
           }
-          label="Same for Shipping Address"
+          label="Rush Delivery"
         />
       </Box>
 
       {/* SHIPPING FORM */}
-      {!values.shippingAddress.isSameAddress && (
-        <Box>
-          <Typography sx={{ mb: "15px" }} fontSize="18px">
-            Shipping Information
-          </Typography>
-          <AddressForm
-            type="shippingAddress"
-            values={values.shippingAddress}
-            touched={touched}
-            errors={errors}
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-          />
-        </Box>
+      {values?.deliveryInfo?.isRushDelivery && (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DateTimePicker']}>
+            <DateTimePicker
+              onChange={(value) =>
+                setFieldValue(formattedName('time'), value, true)
+              }
+              value={values.deliveryInfo?.time}
+              slotProps={{ textField: { variant: 'outlined' } }}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
       )}
     </Box>
   );

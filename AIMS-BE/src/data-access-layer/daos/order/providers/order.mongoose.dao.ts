@@ -1,16 +1,18 @@
-import { ObjectId } from 'mongodb'
-import { BadRequestError } from '../../../../errors'
-import mongoose, { Schema, model } from 'mongoose'
-import { Document } from 'mongodb'
-import { OrderDao } from '../interfaces/order.dao'
-import { OrderModel } from '../schemas/order.model'
-import { IOrder } from '../interfaces/order.interface'
+import { Document, ObjectId } from 'mongodb'
+import { isValidObjectId } from 'mongoose'
 import { CreateOrderDto } from '../../../../dtos/order.dto'
-import { ORDER_STATUS } from '../../../../configs/constants'
+import { BadRequestError } from '../../../../errors'
+import { OrderDao } from '../interfaces/order.dao'
+import { IOrder } from '../interfaces/order.interface'
+import { OrderModel } from '../schemas/order.model'
 
 export class OrderMongooseDao implements OrderDao {
     constructor(private orderModel: Document = OrderModel.getInstance()) {}
     public async findById(id: string): Promise<IOrder | null> {
+        if (!isValidObjectId(id)) {
+            return null
+        }
+
         const OrderDoc = await this.orderModel.findById(id)
         if (!OrderDoc) {
             return null

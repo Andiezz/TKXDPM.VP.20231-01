@@ -1,4 +1,4 @@
-import { Model } from 'mongoose'
+import { Model, isValidObjectId } from 'mongoose'
 import { CreateTransactionDto } from '../../../../dtos/payments.dto'
 import { TransactionDao } from '../interfaces/transaction.dao'
 import { ITransaction } from '../interfaces/transaction.interface'
@@ -33,6 +33,10 @@ export class TransactionMongooseDao implements TransactionDao {
     }
 
     public async findByOrderId(orderId: string): Promise<ITransaction | null> {
+        if (!isValidObjectId(orderId)) {
+            return null
+        }
+
         const txnDoc = await this.txnModel.findOne({ orderId })
         if (!txnDoc) {
             return null

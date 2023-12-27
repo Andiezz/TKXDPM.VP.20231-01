@@ -20,8 +20,7 @@ class MyService {
 @Injectable('consumer')
 class Consumer {
     private attr: string = 'attr'
-    /*@Inject('testService')*/ private testService?: TestService =
-        new TestService()
+    @Inject('testService') private testService?: TestService
     @Inject('myService') private myService?: MyService
 
     public constructor() {}
