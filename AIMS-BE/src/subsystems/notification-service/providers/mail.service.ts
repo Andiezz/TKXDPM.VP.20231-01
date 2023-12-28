@@ -101,6 +101,33 @@ export class MailService implements NotificationService {
         this.sendMail(mailOptions)
     }
 
+    public pushOrderPaidNotification(
+        recipientDto: RecipientDto,
+        id: String
+    ): void {
+        const mailOptions = {
+            from: process.env.NODE_MAILER_EMAIL, // Sender
+            to: recipientDto.recipient, // Recipient
+            subject: 'Order Paid Successfully', // Email subject
+            html: `<!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8">
+              <title>AIMS</title>
+            </head>
+            <body>
+              <h1>AIMS</h1>
+              <p>Thank you for shopping at AIMS. Your order has been paid</p>
+              <strong>- Order Number:</strong> ${id}<br>
+              <strong>- Order Details: </strong> 
+              <a href="http://localhost:5173/order/${id}"> Click Here</a>
+              <p>We sincerely thank you and look forward to serving you in your next purchases!</p>
+            </body>
+            </html> `,
+        }
+        this.sendMail(mailOptions)
+    }
+
     public pushOrderRefundedNotification(
         recipientDto: RecipientDto,
         id: String
@@ -108,7 +135,7 @@ export class MailService implements NotificationService {
         const mailOptions = {
             from: process.env.NODE_MAILER_EMAIL, // Sender
             to: recipientDto.recipient, // Recipient
-            subject: 'Refund Successfully', // Email subject
+            subject: 'Order Refunded Successfully', // Email subject
             html: `<!DOCTYPE html>
             <html lang="en">
             <head>

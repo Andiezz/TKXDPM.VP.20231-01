@@ -112,6 +112,20 @@ export class PaymentController implements Controller {
             createTxnReq.orderId,
             ORDER_STATUS.PAID
         )
+        const deliveryInfo = await this.deliveryInfoDao.findById(
+            orderDoc.deliveryInfoId.toString()
+        )
+
+        if (!deliveryInfo) {
+            throw new BadRequestError('Delivery info not found')
+        }
+
+        const recipient = new RecipientDto(deliveryInfo.email)
+        this.notificationService.pushOrderPaidNotification(
+            recipient,
+            createTxnReq.orderId.toString()
+        )
+
         return res.json(new BaseResponse().ok('Captured payment transaction'))
     }
 

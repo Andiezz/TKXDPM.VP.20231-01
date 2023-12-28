@@ -1,19 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
-import {
-  Box,
-  Button,
-  Stepper,
-  Step,
-  StepLabel,
-  Typography,
-  Grid,
-  Stack,
-  Divider,
-  Paper,
-} from '@mui/material';
-import { clearCart } from '../../state';
-import { useSelector, useDispatch } from 'react-redux';
+import { Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import React, { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { clearCart } from '../../state';
 
 const Payment = ({ invoice }) => {
   const paypal = useRef();
@@ -114,20 +103,7 @@ const Payment = ({ invoice }) => {
       // Parse the JSON response
       const { data } = await resp.json();
       const paymentUrl = data.result;
-      // Capture Transaction
-      await fetch('http://localhost:8080/api/payments/txn/capture', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          paymentMethod: 'vnpay',
-          amount: invoice?.totalAmount.toFixed(),
-          currency: 'vnd',
-          orderId: invoice?.orderId,
-        }),
-      });
-      dispatch(clearCart());
+
       // Redirect the user to the payment URL
       window.location.href = paymentUrl;
     } catch (error) {
