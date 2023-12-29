@@ -1,4 +1,5 @@
 import { Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import BoltIcon from '@mui/icons-material/Bolt';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -282,6 +283,8 @@ const Payment = ({ invoice }) => {
                       <Typography variant="h7">
                         {item?.productDetail?.title} x {item?.quantity}{' '}
                       </Typography>
+                      {item?.productDetail?.supportRush && <BoltIcon />}
+
                       <Typography variant="h7" fontWeight="bold">
                         {Number(
                           item.productDetail?.price.toFixed() * item?.quantity
