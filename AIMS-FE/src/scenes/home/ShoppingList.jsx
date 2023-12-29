@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { IconButton, Grid } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
@@ -99,9 +100,13 @@ const ShoppingList = () => {
       <Typography variant="h3" textAlign="center">
         Our Featured <b>Products</b>
       </Typography>
-      <Box sx={{ '& > :not(style)': { m: 1, ml: 160 } }}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-          <SearchOutlined sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
+      <Box sx={{ marginRight: '45px' }}>
+        <Stack
+          direction={'row'}
+          justifyContent={'flex-end'}
+          alignItems={'center'}
+          spacing={2}
+        >
           <TextField
             id="outlined-basic"
             label="search"
@@ -110,7 +115,8 @@ const ShoppingList = () => {
             size="small"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </Box>
+          <SearchOutlined sx={{ color: 'action.active' }} />
+        </Stack>
       </Box>
       <Tabs
         textColor="primary"
@@ -126,7 +132,7 @@ const ShoppingList = () => {
           '& .MuiTabs-flexContainer': {
             flexWrap: 'wrap',
           },
-          mt: 0
+          mt: 0,
         }}
       >
         <Tab label="ALL" value="all" />
@@ -212,12 +218,7 @@ const ShoppingList = () => {
         ))}
       </Box>
       {totalPages > 1 && (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          mt={2}
-        >
+        <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
           {Array.from({ length: totalPages }).map((_, index) => (
             <Typography
               key={index}
