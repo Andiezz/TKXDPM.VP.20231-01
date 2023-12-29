@@ -179,12 +179,15 @@
 -   Assigned tasks:
 
     -   Add storage service subsystem
+    -   Add feature search and pagination product to UI
 
 -   Implementation details:
     -   Pull Request(s):
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/29]()
+        - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/35]()
     -   Specific implementation details:
         -   Finish adding storage service subsystem for storing product image
+        -   Add feature search and pagination product to UI
 </details>
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
