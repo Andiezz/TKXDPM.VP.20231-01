@@ -27,7 +27,7 @@ import { DeliveryInfoMongooseDao } from '../../data-access-layer/daos/delivery-i
 export class PaymentController implements Controller {
     public readonly path = '/payments'
     public readonly router = Router()
-    private readonly paymentGatewayFactory
+    private readonly paymentGatewayFactory: PaymentGatewayFactory
     private readonly transactionsDao: TransactionDao
     private readonly orderDao: OrderDao
     private readonly notificationService: NotificationService
@@ -106,12 +106,10 @@ export class PaymentController implements Controller {
             throw new BadRequestError('Invalid order id')
         }
 
-        await this.transactionsDao.create(createTxnReq)
+        this.transactionsDao.create(createTxnReq)
 
-        await this.orderDao.updateStatus(
-            createTxnReq.orderId,
-            ORDER_STATUS.PAID
-        )
+        this.orderDao.updateStatus(createTxnReq.orderId, ORDER_STATUS.PAID)
+
         const deliveryInfo = await this.deliveryInfoDao.findById(
             orderDoc.deliveryInfoId.toString()
         )
@@ -170,9 +168,9 @@ export class PaymentController implements Controller {
             ...txnDoc,
             amount: txnDoc.amount * -1,
         })
-        await this.transactionsDao.create(refundTxn)
+        this.transactionsDao.create(refundTxn)
 
-        await this.orderDao.updateStatus(orderId, ORDER_STATUS.REFUNDED)
+        this.orderDao.updateStatus(orderId, ORDER_STATUS.REFUNDED)
 
         const deliveryInfo = await this.deliveryInfoDao.findById(
             orderDoc.deliveryInfoId.toString()

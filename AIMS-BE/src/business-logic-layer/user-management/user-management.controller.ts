@@ -68,7 +68,7 @@ export class UserManagementController implements Controller {
             `${this.path}`,
             jwtAuthGuard as RequestHandler,
             rolesGuard([USER_ROLE.ADMIN]) as RequestHandler,
-            tryCatch(this.geUserList)
+            tryCatch(this.getUserList)
         )
 
         this.router.patch(
@@ -133,7 +133,7 @@ export class UserManagementController implements Controller {
         return res.json(new BaseResponse().ok('Create new user account'))
     }
 
-    private geUserList = async (
+    private getUserList = async (
         req: Request,
         res: Response
     ): Promise<Response | void> => {
