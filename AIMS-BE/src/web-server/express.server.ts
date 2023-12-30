@@ -3,8 +3,9 @@ import Controller from '../common/controller.interface'
 import { NotFoundError } from '../errors'
 import { ErrorMiddleware } from '../middlewares/error.middleware'
 import cors from 'cors'
+import { WebServer } from './web.server'
 
-class ExpressServer {
+class ExpressServer implements WebServer {
     public readonly express: Application
     public readonly port: number
     private readonly CORS_OPTIONS = {

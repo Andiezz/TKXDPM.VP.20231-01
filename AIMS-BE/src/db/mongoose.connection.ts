@@ -1,13 +1,14 @@
 import mongoose from 'mongoose'
+import { DatabaseConnection } from './database.connection'
 
-class MongooseConnection {
+class MongooseConnection implements DatabaseConnection {
     public readonly mongodbUri: string
 
     constructor() {
         this.mongodbUri =
             process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tkxdpm'
 
-        this.initializeDatabaseConnection();
+        this.initializeDatabaseConnection()
     }
 
     private initializeDatabaseConnection(): void {
