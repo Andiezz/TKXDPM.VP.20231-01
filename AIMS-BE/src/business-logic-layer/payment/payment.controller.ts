@@ -1,7 +1,9 @@
-import { Request, RequestHandler, Response, Router } from 'express'
+import { Request, Response, Router } from 'express'
 import { BaseResponse } from '../../common/base-response'
 import Controller from '../../common/controller.interface'
-import { USER_ROLE } from '../../configs/enums'
+import { ORDER_STATUS } from '../../configs/constants'
+import { DeliveryInfoDao } from '../../data-access-layer/daos/delivery-info/interfaces/delivery-info.dao'
+import { DeliveryInfoMongooseDao } from '../../data-access-layer/daos/delivery-info/providers/delivery-info.mongoose.dao'
 import { OrderDao, OrderMongooseDao } from '../../data-access-layer/daos/order'
 import {
     TransactionDao,
@@ -9,20 +11,16 @@ import {
 } from '../../data-access-layer/daos/transactions'
 import { CreateTransactionDto } from '../../dtos/payments.dto'
 import { BadRequestError, ForbiddenError } from '../../errors'
-import { jwtAuthGuard, rolesGuard } from '../../middlewares/auth.middleware'
 import { tryCatch } from '../../middlewares/error.middleware'
 import * as validators from '../../middlewares/validators.middleware'
-import { PaymentGatewayFactory } from '../../subsystems/payment-service'
-import { PayRequestDto } from '../../subsystems/payment-service/dtos/pay.dto'
-import { RefundRequestDto } from '../../subsystems/payment-service/dtos/refund.dto'
-import { ORDER_STATUS } from '../../configs/constants'
 import {
     MailService,
     NotificationService,
     RecipientDto,
 } from '../../subsystems/notification-service'
-import { DeliveryInfoDao } from '../../data-access-layer/daos/delivery-info/interfaces/delivery-info.dao'
-import { DeliveryInfoMongooseDao } from '../../data-access-layer/daos/delivery-info/providers/delivery-info.mongoose.dao'
+import { PaymentGatewayFactory } from '../../subsystems/payment-service'
+import { PayRequestDto } from '../../subsystems/payment-service/dtos/pay.dto'
+import { RefundRequestDto } from '../../subsystems/payment-service/dtos/refund.dto'
 
 export class PaymentController implements Controller {
     public readonly path = '/payments'
