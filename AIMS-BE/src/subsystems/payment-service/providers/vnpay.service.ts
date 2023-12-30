@@ -1,9 +1,9 @@
+import axios, { AxiosResponse } from 'axios'
 import moment from 'moment'
-import axios, { AxiosResponse, AxiosError } from 'axios'
-import { PayRequestDto } from '../dtos/pay.dto'
-import { PaymentService } from '../interfaces/payment.service'
-import { RefundRequestDto } from '../dtos/refund.dto'
 import { PaymentProvider } from '../decorators/payment-provider'
+import { PayRequestDto } from '../dtos/pay.dto'
+import { RefundRequestDto } from '../dtos/refund.dto'
+import { PaymentService } from '../interfaces/payment.service'
 import { PAYMENT_METHOD } from '../payment-gateway.factory'
 
 @PaymentProvider(PAYMENT_METHOD.VNPAY)

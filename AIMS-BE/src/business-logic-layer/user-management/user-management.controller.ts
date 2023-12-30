@@ -8,12 +8,12 @@ import { BadRequestError } from '../../errors'
 import { jwtAuthGuard, rolesGuard } from '../../middlewares/auth.middleware'
 import { tryCatch } from '../../middlewares/error.middleware'
 import * as validators from '../../middlewares/validators.middleware'
-import { compareHash, hashData } from '../../utils/security'
 import {
+    MailService,
     NotificationService,
     RecipientDto,
-    MailService,
 } from '../../subsystems/notification-service'
+import { compareHash, hashData } from '../../utils/security'
 
 export class UserManagementController implements Controller {
     public readonly path = '/users'
