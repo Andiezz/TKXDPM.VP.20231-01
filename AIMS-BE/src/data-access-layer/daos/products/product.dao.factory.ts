@@ -30,7 +30,7 @@ class ProductDaoFactory {
     public getInstance(productType: KIND) {
         if (!this.productDaos[productType]) {
             throw new BadRequestError(
-                'Request for quotation type not supported'
+                'Request for product kind not supported'
             )
         }
         return this.productDaos[productType]
