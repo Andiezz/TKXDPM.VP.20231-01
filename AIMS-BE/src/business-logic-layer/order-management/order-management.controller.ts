@@ -81,7 +81,8 @@ export class OrderManagementController implements Controller {
             productCart.productId.toString()
         )
         const listProductDetail = await this.productDao.findMany(productIds)
-        // Check product tồn kho
+
+        // check product availability()
         for (const productCart of listProductId) {
             const productDetail = listProductDetail.find(
                 (product) =>
@@ -94,6 +95,7 @@ export class OrderManagementController implements Controller {
                 throw new BadRequestError('Số lượng trong kho không đủ')
             }
         }
+        // CheckInfo
         // Check address support rush
         if (deliveryInfo.deliveryMethod == DELIVERY_METHOD.RUSH) {
             const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
@@ -117,6 +119,7 @@ export class OrderManagementController implements Controller {
         }
         //
         let listProductDetails = []
+
         //Caculate Price
         let totalPrice = 0
         let widthMax = 0
@@ -155,6 +158,7 @@ export class OrderManagementController implements Controller {
 
         const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
         const HCM = PROVINCE.find((province) => province.code === 79) // 79 is the code for Hồ Chí Minh
+
         //Caculate ShippingCost
         let shippingCost
         if (totalPrice * 1.1 > 100000) {
@@ -324,4 +328,6 @@ export class OrderManagementController implements Controller {
         }
         return res.json(new BaseResponse().ok('Get Order Success', Status))
     }
+
+    private checkInfo() {}
 }
