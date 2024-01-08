@@ -222,10 +222,9 @@
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/28]()
 </details>
 </details>
-
+<details>
  <summary>Update Project Final: 2/1/2023~13/1/2023 </summary>
 <br>
-<details>
 <details>
 <summary>Nguyễn Ngọc Ánh </summary>
 <br>
