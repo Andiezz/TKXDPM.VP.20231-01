@@ -240,8 +240,20 @@
         - 
     -   Specific implementation details:
         -  Add strategy design pattern:
-        -  Ưrite : shipping-cost-strategy.interface, standard-shipping-cost.strategy,rush-shipping-cost.strategy
-        -  Edit : Order in fontend in checkout 
+        -  Write : shipping-cost-strategy.interface, standard-shipping-cost.strategy,rush-shipping-cost.strategy
+        -  Edit : Order in fontend in checkout
+- Phần cập nhật đã giải quyết được các lỗi khi không có địa điểm , hoặc sản phẩm nào hỗ trợ giao hàng nhanh thì sẽ hiện ra thông báo không hỗ trợ địa điểm hoặc sản phẩm
+- Thêm phần strategy design pattern cho việc tính phí giao hàng
+- Trategy Pattern cho phép bạn chọn lựa giữa các cách tính toán chi phí vận chuyển khác nhau mà không cần sửa đổi code trong controller. Mỗi strategy cung cấp một cách tính toán chi phí vận chuyển dựa trên các điều kiện cụ thể, như phương thức giao hàng (nhanh hoặc thường), kích thước gói hàng, hoặc địa lý.
+
+- Tác dụng của Strategy Pattern trong trường hợp này bao gồm:
+
+- 1. Tính linh hoạt: Cho phép bạn thay đổi cách tính toán chi phí vận chuyển một cách linh hoạt tại runtime mà không cần sửa đổi code nơi sử dụng các strategy.
+
+- 2. Tính mô-đun: Mỗi strategy có thể được phát triển và kiểm thử độc lập, giúp giảm sự phức tạp và tăng tính mô-đun của ứng dụng.
+
+- 3. Dễ dàng mở rộng: Khi cần thêm cách tính toán mới, bạn chỉ cần thêm một strategy mới mà không cần sửa đổi code hiện có.
+
 </details>
 </details>
 
