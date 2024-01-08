@@ -244,7 +244,7 @@
         -  Edit : Order in fontend in checkout
 - Phần cập nhật đã giải quyết được các lỗi khi không có địa điểm , hoặc sản phẩm nào hỗ trợ giao hàng nhanh thì sẽ hiện ra thông báo không hỗ trợ địa điểm hoặc sản phẩm
 - Thêm phần strategy design pattern cho việc tính phí giao hàng
-- Trategy Pattern cho phép bạn chọn lựa giữa các cách tính toán chi phí vận chuyển khác nhau mà không cần sửa đổi code trong controller. Mỗi strategy cung cấp một cách tính toán chi phí vận chuyển dựa trên các điều kiện cụ thể, như phương thức giao hàng (nhanh hoặc thường), kích thước gói hàng, hoặc địa lý.
+- Strategy Pattern cho phép bạn chọn lựa giữa các cách tính toán chi phí vận chuyển khác nhau mà không cần sửa đổi code trong controller. Mỗi strategy cung cấp một cách tính toán chi phí vận chuyển dựa trên các điều kiện cụ thể, như phương thức giao hàng (nhanh hoặc thường), kích thước gói hàng, hoặc địa lý.
 
 - Tác dụng của Strategy Pattern trong trường hợp này bao gồm:
 
