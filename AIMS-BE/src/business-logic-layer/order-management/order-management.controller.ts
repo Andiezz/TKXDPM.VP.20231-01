@@ -34,6 +34,14 @@ import {
     TransactionDao,
     TransactionMongooseDao,
 } from '../../data-access-layer/daos/transactions'
+import { ShippingCostStrategy } from './strategies/shipping-cost-strategy.interface'
+import { RushShippingCostStrategy } from './strategies/rush-shipping-cost.strategy'
+import { StandardShippingCostStrategy } from './strategies/standard-shipping-cost.strategy'
+
+//Functional cohesion
+// Quản lý order
+//Data coupling
+// Chỉ phụ thuộc vào các DAO và repository thông qua interface, không phụ thuộc trực tiếp vào các implementation cụ thể.
 
 export class OrderManagementController implements Controller {
     public readonly path = '/order'
@@ -181,6 +189,13 @@ export class OrderManagementController implements Controller {
         }
         if (deliveryInfo.deliveryMethod == DELIVERY_METHOD.RUSH) {
             shippingCost = shippingCost + 10000
+        }
+
+        let shippingCostStrategy: ShippingCostStrategy
+        if (deliveryInfo.deliveryMethod == DELIVERY_METHOD.RUSH) {
+            shippingCostStrategy = new RushShippingCostStrategy()
+        } else {
+            shippingCostStrategy = new StandardShippingCostStrategy()
         }
 
         const createOrderDto: CreateOrderDto = {
