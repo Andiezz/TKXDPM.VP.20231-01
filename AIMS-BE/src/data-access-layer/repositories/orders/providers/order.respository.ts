@@ -31,6 +31,10 @@ import {
 } from '../../../../subsystems/notification-service'
 import { PROVINCE } from '../../../../configs/constants'
 
+// Functional cohesion
+//Thao tác với dữ liệu order từ cơ sở dữ liệu
+// Data coupling
+// Chỉ phụ thuộc vào các DAO thông qua interface, không phụ thuộc trực tiếp vào các implementation cụ thể
 export class OrderRepository {
     private orderDao: OrderDao
     private orderProductDao: OrderProductDao

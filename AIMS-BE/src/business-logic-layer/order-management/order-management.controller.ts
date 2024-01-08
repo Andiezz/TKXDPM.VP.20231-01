@@ -34,6 +34,14 @@ import {
     TransactionDao,
     TransactionMongooseDao,
 } from '../../data-access-layer/daos/transactions'
+import { ShippingCostStrategy } from './strategies/shipping-cost-strategy.interface'
+import { RushShippingCostStrategy } from './strategies/rush-shipping-cost.strategy'
+import { StandardShippingCostStrategy } from './strategies/standard-shipping-cost.strategy'
+
+//Functional cohesion
+// Quản lý order
+//Data coupling
+// Chỉ phụ thuộc vào các DAO và repository thông qua interface, không phụ thuộc trực tiếp vào các implementation cụ thể.
 
 export class OrderManagementController implements Controller {
     public readonly path = '/order'
@@ -155,33 +163,18 @@ export class OrderManagementController implements Controller {
             throw new BadRequestError('DeliveryInfo error')
         }
         const deliveryInfoId: string = deliveryInfoIdObject.toString()
-
-        const HN = PROVINCE.find((province) => province.code === 1) // 1 is the code for Hà Nội
-        const HCM = PROVINCE.find((province) => province.code === 79) // 79 is the code for Hồ Chí Minh
-
-        //Caculate ShippingCost
-        let shippingCost
-        if (totalPrice * 1.1 > 100000) {
-            shippingCost = 0
-        } else if (
-            deliveryInfo.province == HN?.name ||
-            deliveryInfo.province == HCM?.name
-        ) {
-            if (widthMax <= 3) {
-                shippingCost = widthMax * 22000
-            } else {
-                shippingCost = 3 * 22000 + (widthMax - 3) * 2 * 2500
-            }
-        } else {
-            if (widthMax <= 0.5) {
-                shippingCost = widthMax * 30000
-            } else {
-                shippingCost = 0.5 * 30000 + (widthMax - 0.5) * 2 * 2500
-            }
-        }
+        // Caculate shipping
+        let shippingCostStrategy: ShippingCostStrategy
         if (deliveryInfo.deliveryMethod == DELIVERY_METHOD.RUSH) {
-            shippingCost = shippingCost + 10000
+            shippingCostStrategy = new RushShippingCostStrategy()
+        } else {
+            shippingCostStrategy = new StandardShippingCostStrategy()
         }
+        const shippingCost = shippingCostStrategy.calculate(
+            widthMax,
+            totalPrice,
+            deliveryInfo.province
+        )
 
         const createOrderDto: CreateOrderDto = {
             totalPrice: totalPrice,
