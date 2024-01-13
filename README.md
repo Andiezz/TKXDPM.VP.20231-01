@@ -225,7 +225,6 @@
 <details>
  <summary>Update Project Final: 2/1/2023~13/1/2023 </summary>
 <br>
- 
 -   Assigned tasks: 
 
     -  Add strategy design pattern for caculate shipping
@@ -234,7 +233,7 @@
 -   Implementation details:
     -   Pull Request(s):
         - [https://github.com/Andiezz/TKXDPM.VP.20231-01/pull/39]()
-        - 
+        
     -   Specific implementation details:
         -  Add strategy design pattern:
         -  Write : shipping-cost-strategy.interface, standard-shipping-cost.strategy,rush-shipping-cost.strategy
